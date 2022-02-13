@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { TMovieData, TMovies } from '../../services/api';
 import Text from '../text/text';
@@ -80,8 +81,8 @@ const StyledCard = styled.div`
   }
 `;
 
-const MovieCard: React.FC<{ movie: TMovieData }> = ({ movie }) => (
-  <StyledCard>
+const MovieCard: React.FC<{ movie: TMovieData, onClick?: () => void }> = ({ movie, onClick }) => (
+  <StyledCard {...(onClick && { onClick })}>
     <StyledImage src={movie.poster_path} alt={movie.title} />
     <StyledTitle variant='display2'>
       {movie.title}
@@ -98,6 +99,7 @@ const RowSlider = ({
   onAppearence: () => void;
   isLoading?: boolean
 }) => {
+  const history = useHistory();
   const [swiperInstance, setSwiper] = useState<any>(null);
   const ref = useRef<HTMLDivElement>(null);
   const isFirstAppearence = useRef<boolean>(true);
@@ -123,7 +125,7 @@ const RowSlider = ({
             ? renderSkeleton(12)
             : movies.map((movie) => (
               <SwiperSlide key={movie.id}>
-                <MovieCard movie={movie} />
+                <MovieCard movie={movie} onClick={() => history.push(`/movies/${movie.id}`)} />
               </SwiperSlide>
             ))
         }

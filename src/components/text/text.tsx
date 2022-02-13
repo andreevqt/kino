@@ -58,6 +58,11 @@ const getVariant = (variant: TextVariants) => {
         margin-bottom: ${({ theme }) => `${theme.spaces[6]}px`};
       `;
     }
+    case 'paragraph': {
+      return css`
+        margin-bottom: ${({ theme }) => `${theme.spaces[6]}px`};
+      `;
+    }
     case 'display1': {
       return css`
         font-weight: 500;

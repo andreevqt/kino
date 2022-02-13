@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { TMovies } from '../../services/api';
+import { useHistory } from 'react-router-dom';
+import { TMovieData, TMovies } from '../../services/api';
 import { Navigation } from 'swiper';
 import Button from '../button/button';
 import Text from '../text/text';
@@ -10,7 +11,7 @@ import left from '../../images/left.svg';
 import right from '../../images/right.svg';
 
 const StyledSwiper = styled(Swiper)`
-  margin-top: ${({theme}) => `${theme.spaces[8]}px`};
+  margin-top: ${({ theme }) => `${theme.spaces[8]}px`};
 
   .swiper-button-next,
   .swiper-button-prev {
@@ -102,6 +103,9 @@ const StyledSwiper = styled(Swiper)`
 `;
 
 const Slider = ({ movies, isLoading = false }: { movies: TMovies; isLoading?: boolean }) => {
+
+  const history = useHistory();
+
   return (
     <div style={{ minHeight: '700px' }}>{
       isLoading
@@ -127,7 +131,7 @@ const Slider = ({ movies, isLoading = false }: { movies: TMovies; isLoading?: bo
                     />
                     <div className="swiper-slide__content">
                       <Text variant="h1">{title}</Text>
-                      <Button size="big">Подробнее</Button>
+                      <Button size="big" onClick={() => history.push(`/movies/${id}`)}>Подробнее</Button>
                     </div>
                   </div>
                 </SwiperSlide>

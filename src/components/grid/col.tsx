@@ -4,7 +4,7 @@ import { makeCol, mediaBreakpointUp } from './utils';
 
 type TCol = {
   col?: number | string,
-  auto?: number,
+  auto?: boolean,
   sm?: number,
   md?: number,
   lg?: number,

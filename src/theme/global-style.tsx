@@ -9,7 +9,11 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     font-size: ${({ theme }) => `${theme.font.sizes[1]}px`};
     background-color: ${({ theme }) => `${theme.colors.background.base}`};
     color: ${({ theme }) => `${theme.colors.body.base}`};
-    line-height: 1.2;
+    line-height: 1.4;
+  }
+
+  main {
+    min-height: 800px;
   }
 
   *,
@@ -29,6 +33,7 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
   h4,
   h5,
   h6 {
+    line-height: 1.2;
     font-weight: 700;
   }
 
@@ -46,6 +51,38 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     font-family: ${({ theme }) => `${theme.font.family}`};
     font-size: ${({ theme }) => `${theme.font.sizes[1]}px`};
     cursor: pointer;
+  }
+
+  .fontless {
+    font-size: 0;
+  }
+
+  .mt-4 {
+    margin-top: ${({theme}) => `${theme.spaces[4]}px`} !important;
+  }
+
+  .mt-5 {
+    margin-top: ${({theme}) => `${theme.spaces[5]}px`} !important;
+  }
+
+  .mb-0 {
+    margin-bottom: 0 !important;
+  }
+
+  .mb-2 {
+    margin-bottom: ${({theme}) => `${theme.spaces[2]}px`} !important;
+  }
+
+  .mb-4 {
+    margin-bottom: ${({theme}) => `${theme.spaces[4]}px`} !important;
+  }
+
+  .mb-10 {
+    margin-bottom: ${({theme}) => `${theme.spaces[10]}px`} !important;
+  }
+
+  .mb-20 {
+    margin-bottom: ${({theme}) => `${theme.spaces[20]}px`} !important;
   }
 
   .mr-1 {
@@ -86,6 +123,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
 
   .mr-10 {
     margin-right: ${({theme}) => `${theme.spaces[10]}px`};
+  }
+
+  .pr-10 {
+    padding-right: ${({theme}) => `${theme.spaces[10]}px`};
   }
 `;
 

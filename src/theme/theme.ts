@@ -3,6 +3,7 @@ export type TColor = {
   light: string;
   base: string;
   dark: string;
+  darkest: string;
 };
 
 export type TContainer = {
@@ -46,7 +47,17 @@ export type TSpaces = {
   7: string,
   8: string,
   9: string,
-  10: string
+  10: string,
+  11: string,
+  12: string,
+  13: string,
+  14: string,
+  15: string,
+  16: string,
+  17: string,
+  18: string,
+  19: string,
+  20: string,
 };
 
 export type TRadius = {

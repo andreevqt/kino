@@ -28,5 +28,6 @@ export const generatePalletteItem = (c: string): TColor => {
     lightest: lighten(c, .2),
     light: lighten(c, .1),
     dark: darken(c, .2),
+    darkest: darken(c, .4)
   }
 };

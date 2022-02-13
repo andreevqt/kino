@@ -69,18 +69,10 @@ const StyledButton = styled.button<{ size: TButtonSizes, variant: TButtonVariant
   ${({ variant }) => getButtonVariant(variant)}
 `;
 
-const StyledIcon = styled.div`
+const Icon = styled.div`
   margin-right: 10px;
   font-size: 0;
 `;
-
-const Icon = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <StyledIcon >
-      {children}
-    </StyledIcon>
-  );
-};
 
 const Button: React.FC<{
   variant?: TButtonVariant;
