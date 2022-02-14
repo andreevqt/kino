@@ -6,8 +6,8 @@ const Logo: React.FC<{
 }> = ({ width = 157, height = 30 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="157"
-    height="30"
+    width={width}
+    height={height}
     viewBox="0 0 157 30"
   >
     <path

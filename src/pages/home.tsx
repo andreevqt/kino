@@ -3,18 +3,19 @@ import Base from '../layouts/base';
 import { Container } from '../components/grid';
 import Section from '../components/section/section';
 import { useAppDispatch, useAppSelector } from '../services/store';
-import { getFeaturedMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies } from '../services/actions';
+import { getFeaturedMovies, getPlayingMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies } from '../services/actions';
 import Slider from '../components/slider/slider';
 import RowSlider from '../components/row-slider/row-slider';
 import Text from '../components/text/text';
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { featured, popular, topRated, upcoming } = useAppSelector((store) => ({
+  const { featured, popular, topRated, upcoming, playing } = useAppSelector((store) => ({
     featured: store.home.featured,
     popular: store.home.popular,
     topRated: store.home.topRated,
     upcoming: store.home.upcoming,
+    playing: store.home.playing
   }));
 
   useEffect(() => {
@@ -41,6 +42,16 @@ const Home: React.FC = () => {
             onAppearence={() => dispatch(getTopRatedMovies())}
             movies={topRated.items}
             isLoading={topRated.isPending}
+          />
+        </Container>
+      </Section>
+      <Section>
+        <Container>
+          <Text variant="h4">Сейчас в кино</Text>
+          <RowSlider
+            onAppearence={() => dispatch(getPlayingMovies())}
+            movies={playing.items}
+            isLoading={playing.isPending}
           />
         </Container>
       </Section>

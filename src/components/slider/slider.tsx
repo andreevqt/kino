@@ -102,8 +102,12 @@ const StyledSwiper = styled(Swiper)`
   }
 `;
 
-const Slider = ({ movies, isLoading = false }: { movies: TMovies; isLoading?: boolean }) => {
+type TSliderProps = {
+  movies: TMovies;
+  isLoading?: boolean;
+};
 
+const Slider: React.FC<TSliderProps> = ({ movies, isLoading = false }) => {
   const history = useHistory();
 
   return (

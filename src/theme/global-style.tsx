@@ -53,6 +53,21 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     cursor: pointer;
   }
 
+  .link {
+    color: ${({theme}) => `${theme.colors.primary.base}`};
+    &:hover {
+      color: ${({theme}) => `${theme.colors.primary.lightest}`};
+    }
+  }
+
+  .d-block {
+    display: block;
+  }
+
+  .d-iblock {
+    display: inline-block;
+  }
+
   .fontless {
     font-size: 0;
   }
@@ -69,12 +84,20 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     margin-bottom: 0 !important;
   }
 
+  .mb-1 {
+    margin-bottom: ${({theme}) => `${theme.spaces[1]}px`} !important;
+  }
+
   .mb-2 {
     margin-bottom: ${({theme}) => `${theme.spaces[2]}px`} !important;
   }
 
   .mb-4 {
     margin-bottom: ${({theme}) => `${theme.spaces[4]}px`} !important;
+  }
+
+  .mb-5 {
+    margin-bottom: ${({theme}) => `${theme.spaces[5]}px`} !important;
   }
 
   .mb-10 {

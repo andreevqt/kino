@@ -26,6 +26,9 @@ export default (state: TMovieState = initialState, action: TMovieAction): TMovie
       const { error } = action;
       return { ...initialState, error };
     }
+    case MovieActionTypes.PAGE_UNLOADED: {
+      return { ...initialState };
+    }
     default: {
       return state;
     }

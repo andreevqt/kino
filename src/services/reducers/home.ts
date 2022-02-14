@@ -12,6 +12,7 @@ export type THomeState = {
   popular: THomeEntry;
   topRated: THomeEntry;
   upcoming: THomeEntry;
+  playing: THomeEntry;
 };
 
 const defaults: THomeEntry = {
@@ -24,7 +25,8 @@ const initialState: THomeState = {
   featured: { ...defaults },
   popular: { ...defaults },
   topRated: { ...defaults },
-  upcoming: { ...defaults }
+  upcoming: { ...defaults },
+  playing: { ...defaults }
 };
 
 export default (state: THomeState = initialState, action: THomeAction) => {

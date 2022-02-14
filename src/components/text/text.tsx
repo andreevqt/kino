@@ -13,7 +13,7 @@ type TextVariants =
   | 'display3'
   | 'paragraph';
 
-const elements: { [key in TextVariants]: React.ElementType } = {
+const elements: Record<TextVariants, React.ElementType> = {
   display1: 'div',
   display2: 'div',
   display3: 'div',
@@ -83,18 +83,27 @@ const getVariant = (variant: TextVariants) => {
   }
 };
 
-const StyledText = styled.div<{ variant: TextVariants }>`
-  ${({ variant }) => getVariant(variant)}
+type TStyledTextProps = {
+  variant: TextVariants;
+  muted?: boolean;
+};
+
+const StyledText = styled.div<TStyledTextProps>`
+  ${({ variant }) => getVariant(variant)};
+  ${({ muted, theme }) => muted && `color: ${theme.colors.body.darkest};`}
 `;
 
-const Text: React.FC<{ variant: TextVariants, className?: string }>
-  = ({ variant, children, className }) => {
-    const el = elements[variant];
-    return (
-      <StyledText variant={variant} as={el} className={className}>
-        {children}
-      </StyledText>
-    );
-  };
+type TTextProps = TStyledTextProps & {
+  className?: string;
+};
+
+const Text: React.FC<TTextProps> = ({ variant, children, className, muted = false }) => {
+  const el = elements[variant];
+  return (
+    <StyledText variant={variant} as={el} className={className} muted={muted}>
+      {children}
+    </StyledText>
+  );
+};
 
 export default Text;

@@ -74,14 +74,16 @@ const Icon = styled.div`
   font-size: 0;
 `;
 
-const Button: React.FC<{
+type TButtonProps = {
   variant?: TButtonVariant;
   onClick?: (() => void) | ((e: SyntheticEvent) => void);
   type?: THtmlTypes;
   size?: TButtonSizes;
   iconStart?: React.ReactNode;
   className?: string;
-}> = ({
+};
+
+const Button: React.FC<TButtonProps> = ({
   onClick,
   type = 'button',
   size = 'medium',
@@ -90,18 +92,18 @@ const Button: React.FC<{
   iconStart,
   className = ''
 }) => {
-    return (
-      <StyledButton
-        variant={variant}
-        onClick={onClick}
-        type={type}
-        size={size}
-        className={className}
-      >
-        {iconStart && <Icon>{iconStart}</Icon>}
-        {children}
-      </StyledButton>
-    );
-  };
+  return (
+    <StyledButton
+      variant={variant}
+      onClick={onClick}
+      type={type}
+      size={size}
+      className={className}
+    >
+      {iconStart && <Icon>{iconStart}</Icon>}
+      {children}
+    </StyledButton>
+  );
+};
 
 export default Button;

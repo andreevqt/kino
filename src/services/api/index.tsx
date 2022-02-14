@@ -18,6 +18,7 @@ export const movies = {
   popular: () => axios.get<TPopularMovies>('/movies/popular').then((response) => response.data),
   topRated: () => axios.get<TPopularMovies>('/movies/top_rated').then((response) => response.data),
   upcoming: () => axios.get<TPopularMovies>('/movies/upcoming').then((response) => response.data),
+  playing: () => axios.get<TPopularMovies>('/movies/playing').then((response) => response.data),
   get: (id: number) => axios.get<TMovieDataFull>(`/movies/${id}`).then((response) => response.data),
   credits: (id: number) => axios.get<TMovieDataFull>(`/movies/credits/${id}`).then((response) => response.data),
 };

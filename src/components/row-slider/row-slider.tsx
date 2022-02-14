@@ -9,6 +9,7 @@ import Skeleton from '../skeleton/skeleton';
 import left from '../../images/left.svg';
 import right from '../../images/right.svg';
 import { Navigation } from 'swiper';
+import LazyImg from '../lazy-img/lazy-img';
 
 const renderSkeleton = (count: number) => {
   return [...Array(count)].map((elem, i) => (
@@ -60,7 +61,7 @@ const StyledSwiper = styled(Swiper)`
   }
 `;
 
-const StyledImage = styled.img`
+const StyledImage = styled(LazyImg)`
   width: 100%;
   height: auto;
   border-radius: ${({ theme }) => `${theme.radius.small}`};
@@ -81,23 +82,30 @@ const StyledCard = styled.div`
   }
 `;
 
-const MovieCard: React.FC<{ movie: TMovieData, onClick?: () => void }> = ({ movie, onClick }) => (
+type TMovieCardProps = {
+  movie: TMovieData;
+  onClick?: () => void;
+};
+
+const MovieCard: React.FC<TMovieCardProps> = ({ onClick, movie }) => (
   <StyledCard {...(onClick && { onClick })}>
     <StyledImage src={movie.poster_path} alt={movie.title} />
     <StyledTitle variant='display2'>
       {movie.title}
     </StyledTitle>
   </StyledCard>
-)
+);
 
-const RowSlider = ({
+type TRowSliderProps = {
+  movies: TMovies;
+  onAppearence: () => void;
+  isLoading?: boolean;
+};
+
+const RowSlider: React.FC<TRowSliderProps> = ({
   movies,
   onAppearence,
   isLoading = false
-}: {
-  movies: TMovies;
-  onAppearence: () => void;
-  isLoading?: boolean
 }) => {
   const history = useHistory();
   const [swiperInstance, setSwiper] = useState<any>(null);

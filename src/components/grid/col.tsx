@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { makeCol, mediaBreakpointUp } from './utils';
 
-type TCol = {
+type TColProps = {
   col?: number | string,
   auto?: boolean,
   sm?: number,
@@ -14,7 +14,7 @@ type TCol = {
 
 // TODO: fix me
 
-const Col = styled.div<TCol>`
+const Col = styled.div<TColProps>`
   ${p => p.col && makeCol(p.col, p.theme.grid.columns)}
   ${p => p.auto && makeCol('auto', p.theme.grid.columns)}
   ${p => p.sm && mediaBreakpointUp(`sm`, makeCol(p.sm, p.theme.gird.columns), p.theme.breakpoints)}

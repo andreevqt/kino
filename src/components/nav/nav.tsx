@@ -8,7 +8,9 @@ const NavLinkStyled = styled(Link) <{ active?: boolean }>`
   ${({ active, theme }) => active && `color: ${theme.colors.primary.base};`}
 `;
 
-const NavLink: React.FC<LinkProps & { ignoreActive?: boolean }> = ({ to, ignoreActive = false, ...rest }) => {
+type TNavLinkProps = LinkProps & { ignoreActive?: boolean };
+
+const NavLink: React.FC<TNavLinkProps> = ({ to, ignoreActive = false, ...rest }) => {
   const match = useRouteMatch({ path: to as string, exact: true });
   return (
     <NavLinkStyled

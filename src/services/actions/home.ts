@@ -8,7 +8,7 @@ export enum HomeActionTypes {
   ERROR = 'HOME_ERROR'
 };
 
-type TEntity = 'featured' | 'upcoming' | 'topRated' | 'popular';
+type TEntity = 'featured' | 'upcoming' | 'topRated' | 'popular' | 'playing';
 
 type THomeActionBase = {
   entity: TEntity;
@@ -110,3 +110,19 @@ export const getUpcomingMovies = (): AppThunk => {
     }
   }
 };
+
+export const getPlayingMovies = (): AppThunk => {
+  return async (dispatch) => {
+    dispatch(setPending('playing'));
+    try {
+      const { results } = await movies.playing();
+      results.forEach((item) => {
+        item.poster_path = getPoster(item.poster_path, 185 );
+      })
+      dispatch(setFulfilled('playing', results));
+    } catch (err: any) {
+      dispatch(setError('playing', err.message));
+    }
+  }
+};
+

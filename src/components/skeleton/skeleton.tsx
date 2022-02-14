@@ -29,7 +29,17 @@ const StyledSkeleton = styled.div<{ width?: string; height?: string; variant: Sk
     margin: ${({ margin }) => margin};
 `;
 
-const Skeleton = ({
+type TSkeletonProps = {
+  count?: number;
+  width?: string;
+  height?: string;
+  margin?: string;
+  borderRadius?: string;
+  variant?: SkeletonVariant,
+  className?: string;
+};
+
+const Skeleton: React.FC<TSkeletonProps> = ({
   count = 1,
   width,
   height,
@@ -37,14 +47,6 @@ const Skeleton = ({
   variant = 'text',
   borderRadius = '8px',
   className
-}: {
-  count?: number;
-  width?: string;
-  height?: string;
-  margin?: string;
-  borderRadius?: string;
-  variant?: SkeletonVariant,
-  className?: string
 }) => {
 
   return (

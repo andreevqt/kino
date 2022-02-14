@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Base from '../layouts/base';
 import { Container, Col, Row } from '../components/grid';
 import Section from '../components/section/section';
@@ -7,10 +7,11 @@ import { useAppDispatch, useAppSelector } from '../services/store';
 import Slider from '../components/slider/slider';
 import RowSlider from '../components/row-slider/row-slider';
 import Text from '../components/text/text';
-import { getMovie } from '../services/actions';
+import { getMovie, onPageUnload } from '../services/actions';
 import styled from 'styled-components';
+import LazyImg from '../components/lazy-img/lazy-img';
 
-const Poster = styled.img`
+const Poster = styled(LazyImg)`
   border-radius: ${({ theme }) => theme.radius.small};
   width: 100%;
 `;
@@ -18,7 +19,6 @@ const Poster = styled.img`
 const Description = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: ${({ theme }) => `${theme.spaces[10]}px`};
 `;
 
 const DescriptionRow = styled.div`
@@ -36,7 +36,6 @@ const DescriptionCell = styled.div`
   max-width: 70%;
 `;
 
-
 const Movie: React.FC = () => {
   const dispatch = useAppDispatch();
 
@@ -49,6 +48,9 @@ const Movie: React.FC = () => {
 
   useEffect(() => {
     dispatch(getMovie(+movieId));
+    return () => {
+      dispatch(onPageUnload());
+    };
   }, []);
 
   return (
@@ -57,84 +59,102 @@ const Movie: React.FC = () => {
         <Container>
           {movie && (
             <Row>
-              <Col md={3} className="pr-10">
-                <Poster src={movie.poster_path} title={movie.title} />
-              </Col>
-              <Col md={6} className="pr-10">
-                <Text variant="h2" className="mb-2">{movie.title}</Text>
-                <Text variant="paragraph" className="mb-10">{movie.original_title}</Text>
-                <Text variant="h4">О фильме</Text>
-                <Description>
-                  <DescriptionRow>
-                    <DescriptionHeader>
-                      Год выхода
-                    </DescriptionHeader>
-                    <DescriptionCell>
-                      {new Date(movie.release_date).getFullYear()}
-                    </DescriptionCell>
-                  </DescriptionRow>
-                  <DescriptionRow>
-                    <DescriptionHeader>
-                      Статус
-                    </DescriptionHeader>
-                    <DescriptionCell>
-                      {movie.status}
-                    </DescriptionCell>
-                  </DescriptionRow>
-                  {movie.production_countries.length > 0 && (
-                    <DescriptionRow>
-                      <DescriptionHeader>
-                        Страна
-                      </DescriptionHeader>
-                      <DescriptionCell>
-                        {movie.production_countries.map((country) => country.name).join(', ')}
-                      </DescriptionCell>
-                    </DescriptionRow>
-                  )}
-                  <DescriptionRow>
-                    <DescriptionHeader>
-                      Жанр
-                    </DescriptionHeader>
-                    <DescriptionCell>
-                      {movie.genres.map((genre) => genre.name).join(', ')}
-                    </DescriptionCell>
-                  </DescriptionRow>
-                  <DescriptionRow>
-                    <DescriptionHeader>
-                      Производство
-                    </DescriptionHeader>
-                    <DescriptionCell>
-                      {movie.production_companies.map((company) => company.name).join(', ')}
-                    </DescriptionCell>
-                  </DescriptionRow>
-                  {
-                    !!movie.budget && (
+              <Col md={9} className="pr-10">
+                <Row className="mb-10">
+                  <Col md={4} className="pr-10">
+                    <Poster
+                      alt={movie.title}
+                      src={movie.poster_path}
+                      placeholder={{ width: 342, height: 512 }}
+                    />
+                  </Col>
+                  <Col md={8}>
+                    <Text variant="h2" className="mb-2">{movie.title}</Text>
+                    <Text variant="paragraph" className="mb-10" muted>{movie.original_title}</Text>
+                    <Text variant="h4">О фильме</Text>
+                    <Description>
                       <DescriptionRow>
                         <DescriptionHeader>
-                          Бюджет
+                          Год выхода
                         </DescriptionHeader>
                         <DescriptionCell>
-                          {movie.budget.toLocaleString()} $
+                          {new Date(movie.release_date).getFullYear()}
                         </DescriptionCell>
                       </DescriptionRow>
-                    )
-                  }
-                  {
-                    !!movie.revenue && (
                       <DescriptionRow>
                         <DescriptionHeader>
-                          Сборы
+                          Статус
                         </DescriptionHeader>
                         <DescriptionCell>
-                          {movie.revenue.toLocaleString()} $
+                          {movie.status}
                         </DescriptionCell>
                       </DescriptionRow>
-                    )
-                  }
-                </Description>
+                      {movie.production_countries.length > 0 && (
+                        <DescriptionRow>
+                          <DescriptionHeader>
+                            Страна
+                          </DescriptionHeader>
+                          <DescriptionCell>
+                            {movie.production_countries.map((country) => country.name).join(', ')}
+                          </DescriptionCell>
+                        </DescriptionRow>
+                      )}
+                      <DescriptionRow>
+                        <DescriptionHeader>
+                          Жанр
+                        </DescriptionHeader>
+                        <DescriptionCell>
+                          {movie.genres.map((genre) => genre.name).join(', ')}
+                        </DescriptionCell>
+                      </DescriptionRow>
+                      <DescriptionRow>
+                        <DescriptionHeader>
+                          Производство
+                        </DescriptionHeader>
+                        <DescriptionCell>
+                          {movie.production_companies.map((company) => company.name).join(', ')}
+                        </DescriptionCell>
+                      </DescriptionRow>
+                      {
+                        !!movie.budget && (
+                          <DescriptionRow>
+                            <DescriptionHeader>
+                              Бюджет
+                            </DescriptionHeader>
+                            <DescriptionCell>
+                              {movie.budget.toLocaleString()} $
+                            </DescriptionCell>
+                          </DescriptionRow>
+                        )
+                      }
+                      {
+                        !!movie.revenue && (
+                          <DescriptionRow>
+                            <DescriptionHeader>
+                              Сборы
+                            </DescriptionHeader>
+                            <DescriptionCell>
+                              {movie.revenue.toLocaleString()} $
+                            </DescriptionCell>
+                          </DescriptionRow>
+                        )
+                      }
+                    </Description>
+                  </Col>
+                </Row>
+                <Text variant="h4" className="mb-5">Обзор</Text>
+                <Text variant="paragraph">{movie.overview}</Text>
+
+                <Text variant="h4" className="mb-5">Рецензии</Text>
               </Col>
               <Col md={3}>
-                <Text variant="h5" className="mt-5">В ролях</Text>
+                <Text variant="h5" className="mt-5 mb-5">В ролях</Text>
+                {
+                  movie.credits.cast.slice(0, 15).map((credit) => (
+                    <Link className="d-block mb-1" to={`/people/${credit.id}`}>{credit.name}</Link>
+                  ))
+                }
+                <Link to={`/movie/cast/${movie.credits.id}`} className="link d-block mt-4">{movie.credits.cast.length} актеров</Link>
               </Col>
             </Row>
           )}
