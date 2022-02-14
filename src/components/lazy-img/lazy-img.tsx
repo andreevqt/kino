@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import LazyLoad from 'vanilla-lazyload';
-import { useTheme } from '../../theme';
 
 if (typeof document !== "undefined" && !document.lazyLoadInstance) {
   document.lazyLoadInstance = new LazyLoad({
     elements_selector: '.lazy',
-    load_delay: 1500
+   
   });
 }
 
@@ -39,16 +38,7 @@ const LazyImg: React.FC<TLazyImgProps> = ({
 }) => {
   const el = useRef<HTMLImageElement>(null);
 
-  const theme = useTheme();
-
   useEffect(() => {
-    /* if (typeof document !== "undefined" && document.lazyLoadInstance) {
-      document.lazyLoadInstance = new LazyLoad({
-        elements_selector: ".lazy",
-        load_delay: 3000
-      });
-    } */
-
     if (typeof document !== 'undefined') {
       document.lazyLoadInstance.update();
     }

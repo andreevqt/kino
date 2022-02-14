@@ -151,6 +151,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
   .pr-10 {
     padding-right: ${({theme}) => `${theme.spaces[10]}px`};
   }
+
+  .pt-10 {
+    padding-top: ${({theme}) => `${theme.spaces[10]}px`};
+  }
 `;
 
 export default GlobalStyle;

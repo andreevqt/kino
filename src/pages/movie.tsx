@@ -54,7 +54,7 @@ const Movie: React.FC = () => {
   }, []);
 
   return (
-    <Base>
+    <Base className="pt-10">
       <Section last>
         <Container>
           {movie && (

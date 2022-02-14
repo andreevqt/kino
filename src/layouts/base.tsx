@@ -2,11 +2,15 @@ import React from 'react';
 import Header from '../components/header/header';
 import Footer from '../components/footer/footer';
 
-const Base: React.FC = ({ children }) => {
+type TBaseProps = {
+  className?: string;
+};
+
+const Base: React.FC<TBaseProps> = ({ children, className }) => {
   return (
     <>
       <Header />
-      <main>
+      <main className={className}>
         {children}
       </main>
       <Footer />

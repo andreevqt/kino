@@ -21,26 +21,32 @@ const renderSkeleton = (count: number) => {
   ));
 };
 
-const StyledSwiper = styled(Swiper)`
-  overflow: visible;
+const StyledSwiper = styled.div`
+  position: relative;
+
+  .swiper {
+  }
+
   .swiper-button-next,
   .swiper-button-prev {
-    top: 0;
-    height: 100%;
-    width: 40px;
-    transform: scale(1);
-    transition: transform .2s ease;
+    margin-top: 0;
+    top: calc( 275px/2 - 42px/2);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: ${({theme}) => theme.colors.body.base};
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .05), 0 1px 0 1px rgba(0, 0, 0, .05), 0 0 0 1px rgba(0, 0, 0, .05);
     &:hover {
-      transform: scale(1.3);
+      background-color: ${({theme}) => theme.colors.body.dark};
     }
   }
 
   .swiper-button-prev {
-    left: -60px;
+    left: -24px;
   }
 
   .swiper-button-next {
-    right: -60px;
+    right: -24px;
   }
 
   .swiper-button-next:after,
@@ -50,14 +56,20 @@ const StyledSwiper = styled(Swiper)`
     content: '';
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 16px;
   }
 
   .swiper-button-prev:after {
-    background-image: url(${left});
+    bacground-position: left 46%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23191a1d' viewBox='0 0 24 24'%3E%3Cpath d='M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z'/%3E%3C/svg%3E");
   }
 
   .swiper-button-next:after {
-    background-image: url(${right});
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23191a1d' viewBox='0 0 24 24'%3E%3Cpath d='M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z'/%3E%3C/svg%3E");
+  }
+
+  .swiper-button-disabled {
+    
   }
 `;
 
@@ -112,6 +124,8 @@ const RowSlider: React.FC<TRowSliderProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   const isFirstAppearence = useRef<boolean>(true);
   const onScreen = useOnScreen(ref, 5);
+  const prev = useRef<HTMLDivElement>(null);
+  const next = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (onScreen && isFirstAppearence.current) {
@@ -121,12 +135,28 @@ const RowSlider: React.FC<TRowSliderProps> = ({
     }
   }, [onScreen, isLoading]);
 
+  const shouldShowNav = movies.length > 0;
+
   return (
-    <div ref={ref}>
-      <StyledSwiper
+    <StyledSwiper ref={ref}>
+      <Swiper
         slidesPerView={6}
         spaceBetween={30}
-        onInit={(swiper) => setSwiper(swiper)}
+        modules={[Navigation]}
+        onInit={(swiper) => {
+          console.log('init');
+          setSwiper(swiper);
+        }}
+        onUpdate={(swiper) => {
+          if (movies.length > 0) {
+            // @ts-ignore
+            swiper.params.navigation.prevEl = prev.current;
+            // @ts-ignore
+            swiper.params.navigation.nextEl = next.current;
+            swiper.navigation.init();
+            swiper.navigation.update();
+          }
+        }}
       >
         {
           isLoading || isFirstAppearence.current
@@ -137,8 +167,10 @@ const RowSlider: React.FC<TRowSliderProps> = ({
               </SwiperSlide>
             ))
         }
-      </StyledSwiper>
-    </div>
+      </Swiper>
+      <div ref={prev} className="swiper-button-prev" style={{ opacity: shouldShowNav ? 1 : 0 }} />
+      <div ref={next} className="swiper-button-next" style={{ opacity: shouldShowNav ? 1 : 0 }} />
+    </StyledSwiper>
   );
 };
 
