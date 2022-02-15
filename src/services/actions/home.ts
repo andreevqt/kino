@@ -1,6 +1,7 @@
 import { getPoster, TMovieData, TMovies } from '../api';
 import { movies, getBackdrop } from '../api';
 import { AppDispatch, AppThunk, RootState } from '../store';
+import { transformMovies } from '../transforms';
 
 export enum HomeActionTypes {
   FULFILLED = 'HOME_FULFILLED',
@@ -55,10 +56,7 @@ export const getFeaturedMovies = (): AppThunk => {
     dispatch(setPending('featured'));
     try {
       const items = await movies.featured();
-      items.forEach((item) => {
-        item.backdrop_path = getBackdrop(item.backdrop_path, 1280);
-      })
-      dispatch(setFulfilled('featured', items));
+      dispatch(setFulfilled('featured', transformMovies(items)));
     } catch (err: any) {
       dispatch(setError('featured', err.message));
     }
@@ -70,26 +68,19 @@ export const getPopularMovies = (): AppThunk => {
     dispatch(setPending('popular'));
     try {
       const { results } = await movies.popular();
-      results.forEach((item) => {
-        item.poster_path = getPoster(item.poster_path, 185 );
-      })
-      dispatch(setFulfilled('popular', results));
+      dispatch(setFulfilled('popular', transformMovies(results)));
     } catch (err: any) {
       dispatch(setError('popular', err.message));
     }
   }
 };
 
-
 export const getTopRatedMovies = (): AppThunk => {
   return async (dispatch) => {
     dispatch(setPending('topRated'));
     try {
       const { results } = await movies.topRated();
-      results.forEach((item) => {
-        item.poster_path = getPoster(item.poster_path, 185 );
-      })
-      dispatch(setFulfilled('topRated', results));
+      dispatch(setFulfilled('topRated', transformMovies(results)));
     } catch (err: any) {
       dispatch(setError('topRated', err.message));
     }
@@ -101,10 +92,7 @@ export const getUpcomingMovies = (): AppThunk => {
     dispatch(setPending('upcoming'));
     try {
       const { results } = await movies.upcoming();
-      results.forEach((item) => {
-        item.poster_path = getPoster(item.poster_path, 185 );
-      })
-      dispatch(setFulfilled('upcoming', results));
+      dispatch(setFulfilled('upcoming', transformMovies(results)));
     } catch (err: any) {
       dispatch(setError('upcoming', err.message));
     }
@@ -116,10 +104,7 @@ export const getPlayingMovies = (): AppThunk => {
     dispatch(setPending('playing'));
     try {
       const { results } = await movies.playing();
-      results.forEach((item) => {
-        item.poster_path = getPoster(item.poster_path, 185 );
-      })
-      dispatch(setFulfilled('playing', results));
+      dispatch(setFulfilled('playing', transformMovies(results)));
     } catch (err: any) {
       dispatch(setError('playing', err.message));
     }

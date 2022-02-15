@@ -1,6 +1,7 @@
 import { Action } from 'redux';
-import { getBackdrop, getPoster, movies, TMovieDataFull } from '../api';
+import { getBackdrop, getPoster, movies, TMovieData, TMovieDataFull } from '../api';
 import { AppThunk } from '../store';
+import { transformMovie, transformMovies } from '../transforms';
 
 export enum MovieActionTypes {
   FULFILLED = 'MOVIE_FULFILLED',
@@ -10,14 +11,41 @@ export enum MovieActionTypes {
   PAGE_UNLOADED = 'MOVIE_PAGE_UNLOADED'
 };
 
-export type TMovieAction =
-  | { type: MovieActionTypes.PENDING }
-  | { type: MovieActionTypes.ERROR, error: string }
-  | { type: MovieActionTypes.FULFILLED, movie: TMovieDataFull }
-  | { type: MovieActionTypes.PAGE_LOADED }
-  | { type: MovieActionTypes.PAGE_UNLOADED };
+export type TEntity = 'movie' | 'similar';
 
-export const setPending = (): TMovieAction => ({
+export type TMovieActionFulfilled<T> = {
+  entity: TEntity;
+  type: MovieActionTypes.FULFILLED;
+  data: T;
+};
+
+export type TMovieActionPending = {
+  type: MovieActionTypes.PENDING;
+  entity: TEntity;
+};
+
+export type TMovieActionError = {
+  type: MovieActionTypes.ERROR;
+  entity: TEntity, error: string;
+};
+
+export type TMovieActionPageLoaded = {
+  type: MovieActionTypes.PAGE_LOADED;
+};
+
+export type TMovieActionPageUnloaded = {
+  type: MovieActionTypes.PAGE_UNLOADED;
+};
+
+export type TMovieAction<T = {}> =
+  | TMovieActionPending
+  | TMovieActionError
+  | TMovieActionFulfilled<T>
+  | TMovieActionPageLoaded
+  | TMovieActionPageUnloaded;
+
+export const setPending = (entity: TEntity): TMovieAction => ({
+  entity,
   type: MovieActionTypes.PENDING
 });
 
@@ -29,27 +57,38 @@ export const onPageUnload = (): TMovieAction => ({
   type: MovieActionTypes.PAGE_UNLOADED
 });
 
-export const setError = (error: string): TMovieAction => ({
+export const setError = (entity: TEntity, error: string): TMovieAction => ({
+  entity,
   type: MovieActionTypes.ERROR,
   error
 });
 
-export const setFulfilled = (movie: TMovieDataFull): TMovieAction => ({
+export const setFulfilled = <T>(entity: TEntity, data: T): TMovieAction => ({
+  entity,
   type: MovieActionTypes.FULFILLED,
-  movie
+  data
 });
 
 export const getMovie = (id: number): AppThunk => {
   return async (dispatch) => {
-    dispatch(setPending());
+    dispatch(setPending('movie'));
     try {
       const movie = await movies.get(id);
-      movie.poster_path = getPoster(movie.poster_path, 342);
-      movie.backdrop_path = getBackdrop(movie.backdrop_path, 1280);
-      movie.status = movie.status === 'Released' ? 'Вышел' : movie.status === 'Post Production' ? 'Пост-продакшн' : movie.status;
-      dispatch(setFulfilled(movie));
+      dispatch(setFulfilled('movie', transformMovie(movie)));
     } catch (err: any) {
-      dispatch(setError(err.message));
+      dispatch(setError('movie', err.message));
     }
   }
 };
+
+export const getSimilar = (id: number): AppThunk => {
+  return async (dispatch) => {
+    dispatch(setPending('similar'));
+    try {
+      const { results } = await movies.similar(id);
+      dispatch(setFulfilled('similar', transformMovies(results)));
+    } catch (err: any) {
+      dispatch(setError('similar', err.message));
+    }
+  }
+}

@@ -32,9 +32,11 @@ export type TGrid = {
 export type TColors = {
   primary: TColor;
   secondary: TColor;
+  success: TColor;
   background: TColor;
   body: TColor;
   border: TColor;
+  white: TColor;
 };
 
 export type TSpaces = {
@@ -80,4 +82,5 @@ export type TTheme = {
   radius: TRadius;
   skeleton: TSkeleton;
   overlay: string;
+  review: string;
 };

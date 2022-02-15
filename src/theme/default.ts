@@ -8,7 +8,8 @@ const defaultColors = {
   gray100: '#191a1d',
   gray200: '#1f2125',
   gray300: '#565c67',
-  blue: '#15171e'
+  blue: '#15171e',
+  green: '#3bb33b'
 };
 
 const spacer = 4;
@@ -40,9 +41,11 @@ const defaultTheme: TTheme = {
   colors: {
     primary: generatePalletteItem(defaultColors.yellow),
     secondary: generatePalletteItem(defaultColors.gray300),
+    success: generatePalletteItem(defaultColors.green),
     body: generatePalletteItem(defaultColors.white),
     background: generatePalletteItem(defaultColors.gray100),
     border: generatePalletteItem(defaultColors.white),
+    white: generatePalletteItem(defaultColors.white)
   },
 
   spaces: {
@@ -77,6 +80,8 @@ const defaultTheme: TTheme = {
     base: defaultColors.gray200,
     highlight: lighten(defaultColors.gray200, .1)
   },
+
+  review: defaultColors.gray200,
 
   overlay: defaultColors.gray200
 };

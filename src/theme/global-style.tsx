@@ -68,6 +68,14 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     display: inline-block;
   }
 
+  .d-flex {
+    display: flex;
+  }
+
+  .aic {
+    align-items: center;
+  }
+
   .fontless {
     font-size: 0;
   }

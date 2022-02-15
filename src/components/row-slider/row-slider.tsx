@@ -29,15 +29,16 @@ const StyledSwiper = styled.div`
 
   .swiper-button-next,
   .swiper-button-prev {
+    opacity: 0;
     margin-top: 0;
     top: calc( 275px/2 - 42px/2);
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: ${({theme}) => theme.colors.body.base};
+    background-color: ${({ theme }) => theme.colors.body.base};
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .05), 0 1px 0 1px rgba(0, 0, 0, .05), 0 0 0 1px rgba(0, 0, 0, .05);
     &:hover {
-      background-color: ${({theme}) => theme.colors.body.dark};
+      background-color: ${({ theme }) => theme.colors.body.dark};
     }
   }
 
@@ -68,29 +69,75 @@ const StyledSwiper = styled.div`
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23191a1d' viewBox='0 0 24 24'%3E%3Cpath d='M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z'/%3E%3C/svg%3E");
   }
 
+  .swiper-button-initialized {
+    opacity: 1;
+  }
+
   .swiper-button-disabled {
-    
+    opacity: 0;
   }
 `;
 
-const StyledImage = styled(LazyImg)`
-  width: 100%;
-  height: auto;
-  border-radius: ${({ theme }) => `${theme.radius.small}`};
+const StyledTag = styled.div`
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.colors.success.base};
+  color: ${({ theme }) => theme.colors.white.base};
+  padding: 2px 10px;
+  font-weight: 500;
+`;
+
+const StyledImageWrapper = styled.div`
+  position: relative;
+  font-size: 0;
   margin-bottom: ${({ theme }) => `${theme.spaces[3]}px`};
+
+  
+  img {
+    border-radius: ${({ theme }) => `${theme.radius.small}`};
+    width: 100%;
+    height: auto;
+  }
+
+  &::after {
+    border-radius: ${({ theme }) => `${theme.radius.small}`};
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    content: '';
+    background-color: rgba(0, 0, 0, .4);
+    transition: all .2s ease;
+  }
+
+  ${StyledTag} {
+    position: absolute;
+    z-index: 2;
+    left: -5px;
+    top: 5px;
+    font-size: 14px;
+  }
 `;
 
 const StyledTitle = styled(Text)`
   margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StyledCard = styled.div`
   cursor: pointer;
-  transition: transform .3s ease;
-  transform: translateY(0);
-
+  padding: 5px;
   &:hover {
-    transform: translateY(-5px);
+    ${StyledImageWrapper}::after {
+      visibility: visible;
+      opacity: 1;
+    }
   }
 `;
 
@@ -101,7 +148,10 @@ type TMovieCardProps = {
 
 const MovieCard: React.FC<TMovieCardProps> = ({ onClick, movie }) => (
   <StyledCard {...(onClick && { onClick })}>
-    <StyledImage src={movie.poster_path} alt={movie.title} />
+    <StyledImageWrapper >
+      <LazyImg src={movie.poster_path} alt={movie.title} />
+      <StyledTag>{movie.vote_average}</StyledTag>
+    </StyledImageWrapper>
     <StyledTitle variant='display2'>
       {movie.title}
     </StyledTitle>
@@ -111,13 +161,15 @@ const MovieCard: React.FC<TMovieCardProps> = ({ onClick, movie }) => (
 type TRowSliderProps = {
   movies: TMovies;
   onAppearence: () => void;
+  perView?: number;
   isLoading?: boolean;
 };
 
 const RowSlider: React.FC<TRowSliderProps> = ({
   movies,
   onAppearence,
-  isLoading = false
+  isLoading = false,
+  perView = 6
 }) => {
   const history = useHistory();
   const [swiperInstance, setSwiper] = useState<any>(null);
@@ -136,15 +188,15 @@ const RowSlider: React.FC<TRowSliderProps> = ({
   }, [onScreen, isLoading]);
 
   const shouldShowNav = movies.length > 0;
+  const navigationClasses = shouldShowNav ? 'swiper-button-initialized' : '';
 
   return (
     <StyledSwiper ref={ref}>
       <Swiper
-        slidesPerView={6}
+        slidesPerView={perView}
         spaceBetween={30}
         modules={[Navigation]}
         onInit={(swiper) => {
-          console.log('init');
           setSwiper(swiper);
         }}
         onUpdate={(swiper) => {
@@ -160,16 +212,16 @@ const RowSlider: React.FC<TRowSliderProps> = ({
       >
         {
           isLoading || isFirstAppearence.current
-            ? renderSkeleton(12)
+            ? renderSkeleton(perView)
             : movies.map((movie) => (
               <SwiperSlide key={movie.id}>
-                <MovieCard movie={movie} onClick={() => history.push(`/movies/${movie.id}`)} />
+                <MovieCard movie={movie} onClick={() => history.replace({ pathname: `/movies/${movie.id}` })} />
               </SwiperSlide>
             ))
         }
       </Swiper>
-      <div ref={prev} className="swiper-button-prev" style={{ opacity: shouldShowNav ? 1 : 0 }} />
-      <div ref={next} className="swiper-button-next" style={{ opacity: shouldShowNav ? 1 : 0 }} />
+      <div ref={prev} className={`swiper-button-prev ${navigationClasses}`} />
+      <div ref={next} className={`swiper-button-next ${navigationClasses}`} />
     </StyledSwiper>
   );
 };

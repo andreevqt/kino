@@ -65,6 +65,8 @@ const StyledButton = styled.button<{ size: TButtonSizes, variant: TButtonVariant
   display: flex;
   align-items: center;
   transition: all .2s ease;
+  font-weight: 500;
+  letter-spacing: .4px;
   ${({ size }) => getButtonSize(size)}
   ${({ variant }) => getButtonVariant(variant)}
 `;

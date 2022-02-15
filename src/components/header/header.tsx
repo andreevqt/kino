@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   return (
     <StyledHeader>
       <Container>
-        <Link to="/" className="fontlsess mr-10"><Logo /></Link>
+        <Link to="/" className="fontless mr-10"><Logo /></Link>
         <Nav>
           <NavLink to="/">Фильмы</NavLink>
           <NavLink to="/series">Сериалы</NavLink>

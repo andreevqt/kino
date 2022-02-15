@@ -19,7 +19,7 @@ const StyledSkeleton = styled.div<{ width?: string; height?: string; variant: Sk
     display: ${({ variant }) => `${variant === 'text' ? 'inline-block' : 'block'}`} ;
     width: ${({ width }) => width ?? `100%`};
     height: ${({ height }) => height ?? 'auto'};
-    line-height: 1;
+    font-size: 0;
     background-color: ${({ theme }) => theme.skeleton.base};
     background-size: 200px 100%;
     background-repeat: no-repeat;

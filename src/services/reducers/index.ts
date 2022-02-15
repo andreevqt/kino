@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import home, { THomeState } from './home';
-import movie, { TMovieState } from './movie';
+import movie, { TMovieStateOuter } from './movie';
 
 type AppState = {
   home: THomeState;
-  movie: TMovieState;
+  movie: TMovieStateOuter;
 };
 
 export {

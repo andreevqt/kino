@@ -95,4 +95,4 @@ export type TTMDBResponse = {
   total_results: number;
 };
 
-export type TPopularMovies = TTMDBResponse & { results: TMovies };
+export type TMoviesResponse = TTMDBResponse & { results: TMovies };
