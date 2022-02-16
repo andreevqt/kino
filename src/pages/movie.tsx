@@ -155,7 +155,7 @@ const ReviewBox: React.FC<TReviewBoxProps> = ({ last = false }) => {
   return (
     <StyledReviewBox last={last}>
       <ReviewBoxHeader>
-        <Avatar src="https://eu.ui-avatars.com/api/?name=John+Doe&background=random" alt="John Doe" />
+        <Avatar src="https://eu.ui-avatars.com/api/?name=John+Doe&background=random&color=fff" alt="John Doe" />
         <UserProfile>
           <Text variant="display2" className="mb-0">Джон Доу</Text>
           <Text variant="display3" className="mb-0" muted>1 рецензия</Text>
@@ -200,7 +200,7 @@ const Movie: React.FC = () => {
   }, [movieId]);
 
   return (
-    <Base className="pt-10">
+    <Base>
       <Section last>
         <Container>
           {movie && !isPending && (
