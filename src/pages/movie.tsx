@@ -12,6 +12,10 @@ import styled from 'styled-components';
 import LazyImg from '../components/lazy-img/lazy-img';
 import Box from '../components/box/box';
 import Button from '../components/button/button';
+import Star from '../icons/star';
+import CommentIcon from '../icons/comment';
+import Heart from '../icons/heart';
+import ReadMore from '../components/read-more/read-more';
 
 const Poster = styled(LazyImg)`
   border-radius: ${({ theme }) => theme.radius.small};
@@ -40,25 +44,135 @@ const Description = styled.div`
   }
 `;
 
-type TRevieBoxProps = {
-
+type TReviewBoxProps = {
+  last?: boolean;
 };
 
 const ReviewBoxHeader = styled.div`
   padding: ${({ theme }) => `${theme.spaces[5]}px`};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.background.base};
+  display: flex;
 `;
 
-const StyledReviewBox = styled.div`
+const ReviewBoxBody = styled.div`
+  padding: ${({ theme }) => `${theme.spaces[5]}px`};
+`;
+
+const ReviewBoxFooter = styled.div`
+  display: flex;
+  align-items: center;
+  border-top: 1px solid ${({ theme }) => theme.colors.background.base};
+  padding: ${({ theme }) => `${theme.spaces[5]}px`};
+`
+
+const StyledReviewBox = styled.div<TReviewBoxProps>`
   background-color: ${({ theme }) => theme.review};
   border-radius: ${({ theme }) => theme.radius.small};
+  ${({ theme, last }) => !last && `margin-bottom: ${theme.spaces[5]}px;`}
 `;
 
-const ReviewBox: React.FC<TRevieBoxProps> = () => {
+const UserProfile = styled.div`
+  margin-left: ${({ theme }) => theme.spaces[3]}px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const Avatar = styled.img`
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+`;
+
+const ReviewDate = styled(Text).attrs(() => ({ muted: true, variant: 'display3' }))`
+  margin-bottom: 0;
+`;
+
+const ReviewMeta = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+`;
+
+const ReviewRating = styled(Text).attrs(() => ({ variant: 'display2' }))`
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+`;
+
+const StarIcon = styled(Star).attrs(() => ({ width: "20", height: "20" }))`
+  margin-top: -1px;
+  margin-left: 8px;
+  color: ${({ theme }) => theme.colors.primary.base};
+`;
+
+const ReviewMetaWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  svg {
+    margin-right: 8px;
+  }
+`;
+
+type TReviewMetaLinkProps = {
+  className?: string;
+  icon: React.ReactNode;
+  count?: number;
+}
+
+const ReviewMetaBtn: React.FC<TReviewMetaLinkProps> = ({
+  icon,
+  className,
+  count = 0
+}) => {
   return (
-    <StyledReviewBox>
+    <ReviewMetaWrapper
+      className={className}
+    >
+      {icon}
+      {count > 0 && count}
+    </ReviewMetaWrapper>
+  );
+};
+
+const StyledReviewLikeBtn = styled.div<{ active?: boolean }>`
+  ${({ active, theme }) => active && `color: ${theme.colors.danger.base}`};
+`;
+
+const ReviewLikeBtn: React.FC<{ active?: boolean }> = ({
+  active = false
+}) => {
+  return (
+    <StyledReviewLikeBtn active={active}>
+      <ReviewMetaBtn icon={<Heart width="16" height="16" />} />
+    </StyledReviewLikeBtn>
+  )
+};
+
+const ReviewBox: React.FC<TReviewBoxProps> = ({ last = false }) => {
+  return (
+    <StyledReviewBox last={last}>
       <ReviewBoxHeader>
-        Hello world
+        <Avatar src="https://eu.ui-avatars.com/api/?name=John+Doe&background=random" alt="John Doe" />
+        <UserProfile>
+          <Text variant="display2" className="mb-0">Джон Доу</Text>
+          <Text variant="display3" className="mb-0" muted>1 рецензия</Text>
+        </UserProfile>
+        <ReviewMeta>
+          <ReviewRating>9/10<StarIcon /></ReviewRating>
+          <ReviewDate>9 октября 2007 в 20:32</ReviewDate>
+        </ReviewMeta>
       </ReviewBoxHeader>
+      <ReviewBoxBody>
+        <Text variant="h4">Лучшее фэнтези за всю историю</Text>
+        <ReadMore text="Повседневная практика показывает, что реализация намеченных плановых заданий влечет за собой процесс внедрения и модернизации соответствующий условий активизации. Товарищи! постоянное информационно-пропагандистское обеспечение нашей деятельности играет важную роль в формировании существенных финансовых и административных условий." />
+      </ReviewBoxBody>
+      <ReviewBoxFooter>
+        <ReviewLikeBtn />
+        <ReviewMetaBtn icon={<CommentIcon width="16" height="16" />} />
+      </ReviewBoxFooter>
     </StyledReviewBox>
   );
 };
@@ -193,6 +307,9 @@ const Movie: React.FC = () => {
                     <Button size="medium">Написать рецензию</Button>
                   </Box>
                   <ReviewBox />
+                  <ReviewBox />
+                  <ReviewBox />
+                  <ReviewBox last />
                 </Box>
               </Col>
               <Col md={3}>

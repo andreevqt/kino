@@ -31,36 +31,36 @@ const getVariant = (variant: TextVariants) => {
     case 'h1': {
       return css`
         margin-bottom: ${({ theme }) => `${theme.spaces[7]}px`};
-        font-size: ${({ theme }) => `${theme.font.sizes[6]}px`};
-      `;
+        font-size: ${({ theme }) => `${theme.font.sizes[4]}px`};
+      `
     }
     case 'h2': {
       return css`
         font-size: ${({ theme }) => `${theme.font.sizes[5]}px`};
-        margin-bottom: ${({ theme }) => `${theme.spaces[6]}px`};
+        margin-bottom: ${({ theme }) => `${theme.spaces[5]}px`};
       `;
     }
     case 'h3': {
       return css`
         font-size: ${({ theme }) => `${theme.font.sizes[4]}px`};
-        margin-bottom: ${({ theme }) => `${theme.spaces[6]}px`};
+        margin-bottom: ${({ theme }) => `${theme.spaces[5]}px`};
       `;
     }
     case 'h4': {
       return css`
         font-size: ${({ theme }) => `${theme.font.sizes[3]}px`};
-        margin-bottom: ${({ theme }) => `${theme.spaces[6]}px`};
+        margin-bottom: ${({ theme }) => `${theme.spaces[5]}px`};
       `;
     }
     case 'h5': {
       return css`
         font-size: ${({ theme }) => `${theme.font.sizes[2]}px`};
-        margin-bottom: ${({ theme }) => `${theme.spaces[6]}px`};
+        margin-bottom: ${({ theme }) => `${theme.spaces[5]}px`};
       `;
     }
     case 'paragraph': {
       return css`
-        margin-bottom: ${({ theme }) => `${theme.spaces[6]}px`};
+        margin-bottom: ${({ theme }) => `${theme.spaces[5]}px`};
       `;
     }
     case 'display1': {
@@ -74,6 +74,13 @@ const getVariant = (variant: TextVariants) => {
       return css`
         font-weight: 500;
         font-size: ${({ theme }) => `${theme.font.sizes[2]}px`};
+        margin-bottom: ${({ theme }) => `${theme.font.sizes[3]}px`};
+      `;
+    }
+    case 'display3': {
+      return css`
+        font-weight: 500;
+        font-size: ${({ theme }) => `${theme.font.sizes[0]}px`};
         margin-bottom: ${({ theme }) => `${theme.font.sizes[3]}px`};
       `;
     }

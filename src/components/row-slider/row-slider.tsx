@@ -23,6 +23,7 @@ const renderSkeleton = (count: number) => {
 
 const StyledSwiper = styled.div`
   position: relative;
+  margin: 0 -5px;
 
   .swiper {
   }
@@ -128,15 +129,20 @@ const StyledTitle = styled(Text)`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: all .2s ease;
 `;
 
 const StyledCard = styled.div`
   cursor: pointer;
-  padding: 5px;
+  padding: 0 5px;
   &:hover {
     ${StyledImageWrapper}::after {
       visibility: visible;
       opacity: 1;
+    }
+
+    ${StyledTitle} {
+      color: ${({ theme }) => theme.colors.primary.base};
     }
   }
 `;

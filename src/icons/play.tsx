@@ -1,11 +1,9 @@
 import React from 'react';
+import { TIconProps } from '../types/common';
 
-const Play = ({
+const Play: React.FC<TIconProps> = ({
   width = '24',
   height = '24'
-}: {
-  width?: string,
-  height?: string
 }) => {
   return (
     <svg
@@ -20,5 +18,3 @@ const Play = ({
 };
 
 export default Play;
-
-

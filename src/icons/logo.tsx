@@ -1,9 +1,10 @@
 import React from 'react';
+import { TIconProps } from '../types/common';
 
-const Logo: React.FC<{
-  width?: number;
-  height?: number;
-}> = ({ width = 157, height = 30 }) => (
+const Logo: React.FC<TIconProps> = ({
+  width = '157',
+  height = '30'
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={width}

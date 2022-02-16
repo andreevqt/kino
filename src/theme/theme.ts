@@ -37,6 +37,7 @@ export type TColors = {
   body: TColor;
   border: TColor;
   white: TColor;
+  danger: TColor;
 };
 
 export type TSpaces = {

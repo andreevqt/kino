@@ -9,7 +9,8 @@ export const transformMovies = (items: TMovieData[]) => {
   return items.map((item) => ({
     ...item,
     poster_path: getPoster(item.poster_path, 185),
-    backdrop_path: getBackdrop(item.backdrop_path, 1280)
+    backdrop_path: getBackdrop(item.backdrop_path, 1280),
+    vote_average: Math.round(item.vote_average * 1e1) / 1e1
   }));
 };
 

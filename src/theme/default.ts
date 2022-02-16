@@ -9,7 +9,8 @@ const defaultColors = {
   gray200: '#1f2125',
   gray300: '#565c67',
   blue: '#15171e',
-  green: '#3bb33b'
+  green: '#3bb33b',
+  red: '#ff3347'
 };
 
 const spacer = 4;
@@ -45,7 +46,8 @@ const defaultTheme: TTheme = {
     body: generatePalletteItem(defaultColors.white),
     background: generatePalletteItem(defaultColors.gray100),
     border: generatePalletteItem(defaultColors.white),
-    white: generatePalletteItem(defaultColors.white)
+    white: generatePalletteItem(defaultColors.white),
+    danger: generatePalletteItem(defaultColors.red)
   },
 
   spaces: {
