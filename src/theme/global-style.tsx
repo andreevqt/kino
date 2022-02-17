@@ -84,6 +84,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     font-size: 0;
   }
 
+  .ml-auto {
+    margin-left: auto;
+  }
+
   .mt-4 {
     margin-top: ${({theme}) => `${theme.spaces[4]}px`} !important;
   }

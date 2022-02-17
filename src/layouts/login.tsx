@@ -26,14 +26,6 @@ const Login: React.FC<TLoginProps> = ({ background, children }) => {
   return (
     <>
       <Background background={background} />
-      <Header transparent>
-        <Link to="/">
-          <Logo />
-        </Link>
-        <Nav right>
-          <Button variant="primary">Регистрация</Button>
-        </Nav>
-      </Header>
       {children}
     </>
   );

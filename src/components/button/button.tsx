@@ -59,40 +59,49 @@ const getButtonVariant = (variant: TButtonVariant) => {
   }
 };
 
-const StyledButton = styled.button<{ size: TButtonSizes, variant: TButtonVariant }>`
+type TStyledButtonProps = {
+  size?: TButtonSizes;
+  variant?: TButtonVariant;
+  fullWidth?: boolean;
+}
+
+const StyledButton = styled.button<TStyledButtonProps>`
   padding: ${({ theme }) => `${theme.spaces[3]}px ${theme.spaces[8]}px`};
   border-radius: 8px;
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: all .2s ease;
   font-weight: 500;
   letter-spacing: .4px;
-  ${({ size }) => getButtonSize(size)}
-  ${({ variant }) => getButtonVariant(variant)}
+  ${({ fullWidth }) => fullWidth && 'width: 100%;'}
+  ${({ size = 'medium' }) => getButtonSize(size)}
+  ${({ variant = 'primary' }) => getButtonVariant(variant)}
 `;
 
 const Icon = styled.div`
-  margin-right: 10px;
-  font-size: 0;
+  margin - right: 10px;
+  font - size: 0;
 `;
 
-type TButtonProps = {
-  variant?: TButtonVariant;
+type TButtonProps = TStyledButtonProps & {
   onClick?: (() => void) | ((e: SyntheticEvent) => void);
   type?: THtmlTypes;
-  size?: TButtonSizes;
   iconStart?: React.ReactNode;
   className?: string;
+  to?: string;
 };
 
 const Button: React.FC<TButtonProps> = ({
   onClick,
   type = 'button',
-  size = 'medium',
-  variant = 'primary',
+  size,
+  variant,
   children,
   iconStart,
-  className = ''
+  fullWidth = false,
+  className = '',
+  to = '/'
 }) => {
   return (
     <StyledButton
@@ -101,6 +110,7 @@ const Button: React.FC<TButtonProps> = ({
       type={type}
       size={size}
       className={className}
+      fullWidth={fullWidth}
     >
       {iconStart && <Icon>{iconStart}</Icon>}
       {children}

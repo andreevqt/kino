@@ -89,5 +89,7 @@ export type TTheme = {
   
   inputColor: string;
   inputBgColor: string;
+  inputBgColorFocus: string;
+  inputBorderColor: string;
   inputPlaceholderColor: string;
 };

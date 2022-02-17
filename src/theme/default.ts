@@ -75,7 +75,7 @@ const defaultTheme: TTheme = {
   },
 
   radius: {
-    tiny: '3px',
+    tiny: '4px',
     small: '8px',
     big: '20px'
   },
@@ -92,7 +92,9 @@ const defaultTheme: TTheme = {
   mainSliderBulletBg: alpha(defaultColors.gray100, .4),
 
   inputColor: defaultColors.white,
-  inputBgColor: lighten(defaultColors.gray100, .9),
+  inputBgColor: defaultColors.gray100,
+  inputBgColorFocus: lighten(defaultColors.gray100, .4),
+  inputBorderColor: darken(defaultColors.white, .7),
   inputPlaceholderColor: darken(defaultColors.white, .4)
 };
 

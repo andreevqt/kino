@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { makeCol, mediaBreakpointUp } from './utils';
 
 type TColProps = {
+  className?: string,
   col?: number | string,
   auto?: boolean,
   sm?: number,
