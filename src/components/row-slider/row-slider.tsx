@@ -91,12 +91,13 @@ const StyledImageWrapper = styled.div`
   position: relative;
   font-size: 0;
   margin-bottom: ${({ theme }) => `${theme.spaces[3]}px`};
-
+  min-height: 265px;
+  display: flex;
   
   img {
     border-radius: ${({ theme }) => `${theme.radius.small}`};
     width: 100%;
-    height: auto;
+    min-height: 100%;
   }
 
   &::after {

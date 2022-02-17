@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const NavLinkStyled = styled(Link) <{ active?: boolean }>`
   font-weight: 500;
-  padding: ${({ theme }) => `${theme.spaces[5]}px ${theme.spaces[3]}px`};
+  padding: ${({ theme }) => `0 ${theme.spaces[3]}px`};
   ${({ active, theme }) => active && `color: ${theme.colors.primary.base};`}
 `;
 

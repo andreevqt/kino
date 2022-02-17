@@ -9,7 +9,7 @@ const useOnScreen = (ref: React.RefObject<HTMLDivElement>, offset = 0) => {
       return;
     }
     const { top, height } = ref.current.getBoundingClientRect();
-    setIsVisible(top + offset >= 0 && top + height - offset <= window.innerHeight);
+    setIsVisible(top + offset >= 0 && top - offset <= window.innerHeight);
   }, 100);
 
   useEffect(() => {

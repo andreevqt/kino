@@ -22,6 +22,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     box-sizing: border-box;
   }
 
+  :focus {
+    outline: none;
+  }
+
   a {
     text-decoration: none;
     color: inherit;

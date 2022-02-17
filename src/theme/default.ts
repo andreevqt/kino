@@ -1,5 +1,6 @@
 import { TTheme } from './theme';
-import { generatePalletteItem, lighten } from './utils';
+import { generatePalletteItem, lighten, alpha, darken } from './utils';
+import color from 'color';
 
 const defaultColors = {
   yellow: '#feba2b',
@@ -74,6 +75,7 @@ const defaultTheme: TTheme = {
   },
 
   radius: {
+    tiny: '3px',
     small: '8px',
     big: '20px'
   },
@@ -85,7 +87,13 @@ const defaultTheme: TTheme = {
 
   review: defaultColors.gray200,
 
-  overlay: defaultColors.gray200
+  overlay: defaultColors.gray200,
+
+  mainSliderBulletBg: alpha(defaultColors.gray100, .4),
+
+  inputColor: defaultColors.white,
+  inputBgColor: lighten(defaultColors.gray100, .9),
+  inputPlaceholderColor: darken(defaultColors.white, .4)
 };
 
 export default defaultTheme;

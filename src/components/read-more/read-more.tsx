@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Text from '../text/text';
-import Button from '../button/button';
 
 type TReadMoreProps = {
   text: string;
@@ -24,7 +23,7 @@ const ReadMore: React.FC<TReadMoreProps> = ({
   const [isShown, setIsShown] = useState(false);
   return (
     <>
-      <Text variant="paragraph" className="">
+      <Text variant="paragraph">
         {
           isShown ? text : text.slice(0, limit)
         }

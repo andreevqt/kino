@@ -65,12 +65,13 @@ export type TSpaces = {
 
 export type TRadius = {
   small: string;
-  big: string
+  big: string;
+  tiny: string;
 };
 
 export type TSkeleton = {
-  base: string,
-  highlight: string
+  base: string;
+  highlight: string;
 };
 
 export type TTheme = {
@@ -84,4 +85,9 @@ export type TTheme = {
   skeleton: TSkeleton;
   overlay: string;
   review: string;
+  mainSliderBulletBg: string;
+  
+  inputColor: string;
+  inputBgColor: string;
+  inputPlaceholderColor: string;
 };

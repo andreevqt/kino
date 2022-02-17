@@ -2,13 +2,14 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useHistory } from 'react-router-dom';
 import { TMovieData, TMovies } from '../../services/api';
-import { Navigation } from 'swiper';
+import { Navigation, Autoplay, Pagination } from 'swiper';
 import Button from '../button/button';
 import Text from '../text/text';
 import styled from 'styled-components';
 import Skeleton from '../skeleton/skeleton';
 import left from '../../images/left.svg';
 import right from '../../images/right.svg';
+import color from 'color';
 
 const StyledSwiper = styled(Swiper)`
   margin-top: ${({ theme }) => `${theme.spaces[8]}px`};
@@ -100,6 +101,42 @@ const StyledSwiper = styled(Swiper)`
     width: 100%;
     height: auto;
   }
+
+  @keyframes countingBar {
+    0% {width: 0;}
+    100% {width:100%;}
+  }
+
+  .swiper-pagination-bullet {
+    position: relative;
+    width: 100px;
+    height: 6px;
+    overflow: hidden;
+    margin: 0 6px !important;
+    opacity: 1;
+    border-radius: 3px;
+    background-color: ${({theme}) => theme.mainSliderBulletBg};
+    &::before {
+      display: block;
+      content: ''; 
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background-color: ${({theme}) => theme.colors.primary.base};
+    }
+  }
+
+  .swiper-pagination-bullet-active {
+    &::before {
+      animation-name: countingBar;
+      animation-duration: 6s;
+      animation-timing-function: ease-in;
+      animation-iteration-count: 1;
+      animation-direction: alternate ;
+      animation-fill-mode:forwards;
+    }
+  }
+  
 `;
 
 type TSliderProps = {
@@ -117,11 +154,18 @@ const Slider: React.FC<TSliderProps> = ({ movies, isLoading = false }) => {
         : (
           <StyledSwiper
             slidesPerView="auto"
+            autoplay={{
+              delay: 6000
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            effect="fade"
             centeredSlides={true}
             spaceBetween={30}
             loop={true}
             loopedSlides={3}
-            modules={[Navigation]}
+            modules={[Autoplay, Navigation, Pagination]}
             navigation={true}
           >
             {
