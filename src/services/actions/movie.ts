@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Action } from 'redux';
 import { getBackdrop, getPoster, movies, TMovieData, TMovieDataFull } from '../api';
 import { AppThunk } from '../store';

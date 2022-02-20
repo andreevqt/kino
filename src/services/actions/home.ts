@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { getPoster, TMovieData, TMovies } from '../api';
 import { movies, getBackdrop } from '../api';
 import { AppDispatch, AppThunk, RootState } from '../store';

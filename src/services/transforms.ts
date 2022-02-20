@@ -22,5 +22,7 @@ export const transformMovie = (movie: TMovieDataFull) => ({
     ? 'Вышел'
     : movie.status === 'Post Production'
       ? 'Пост-продакшн'
-      : movie.status
+      : movie.status == 'Planned'
+        ? 'Планируется'
+        : movie.status
 });

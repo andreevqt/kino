@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '../services/store';
 import Slider from '../components/slider/slider';
 import RowSlider from '../components/row-slider/row-slider';
 import Text from '../components/text/text';
-import { getMovie, getSimilar, onPageUnload } from '../services/actions';
 import styled from 'styled-components';
 import LazyImg from '../components/lazy-img/lazy-img';
 import Box from '../components/box/box';
@@ -16,6 +15,7 @@ import Star from '../icons/star';
 import CommentIcon from '../icons/comment';
 import Heart from '../icons/heart';
 import ReadMore from '../components/read-more/read-more';
+import { fetchMovie, fetchSimilar, onPageUnload } from '../services/slices/movie';
 
 const Poster = styled(LazyImg)`
   border-radius: ${({ theme }) => theme.radius.small};
@@ -184,19 +184,18 @@ const Movie: React.FC = () => {
 
   const { movie, isPending, similar } = useAppSelector((store) => ({
     movie: store.movie.movie.data,
-    isPending: store.movie.movie.isPending,
+    isPending: store.movie.movie.isLoading,
     similar: store.movie.similar
   }));
 
   useEffect(() => {
-
     return () => {
       dispatch(onPageUnload());
     };
   }, []);
 
   useEffect(() => {
-    dispatch(getMovie(+movieId));
+    dispatch(fetchMovie(+movieId));
   }, [movieId]);
 
   return (
@@ -295,9 +294,9 @@ const Movie: React.FC = () => {
                 <Box className="mb-10">
                   <Text variant="h4">Похожие фильмы</Text>
                   <RowSlider
-                    onAppearence={() => dispatch(getSimilar(+movieId))}
+                    onAppearence={() => dispatch(fetchSimilar(+movieId))}
                     movies={similar.items}
-                    isLoading={similar.isPending}
+                    isLoading={similar.isLoading}
                     perView={4}
                   />
                 </Box>

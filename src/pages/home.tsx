@@ -3,35 +3,41 @@ import Base from '../layouts/base';
 import { Container } from '../components/grid';
 import Section from '../components/section/section';
 import { useAppDispatch, useAppSelector } from '../services/store';
-import { getFeaturedMovies, getPlayingMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies } from '../services/actions';
 import Slider from '../components/slider/slider';
 import RowSlider from '../components/row-slider/row-slider';
 import Text from '../components/text/text';
+import { createFetch } from '../services/slices/home';
+
+const fetchFeatured = createFetch('featured');
+const fetchPopular = createFetch('popular');
+const fetchTopRated = createFetch('topRated');
+const fetchUpcoming = createFetch('upcoming');
+const fetchPlaying = createFetch('playing');
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
   const { featured, popular, topRated, upcoming, playing } = useAppSelector((store) => ({
     featured: store.home.featured,
     popular: store.home.popular,
+    playing: store.home.playing,
     topRated: store.home.topRated,
-    upcoming: store.home.upcoming,
-    playing: store.home.playing
+    upcoming: store.home.upcoming
   }));
 
   useEffect(() => {
-    dispatch(getFeaturedMovies());
+    dispatch(fetchFeatured());
   }, []);
 
   return (
     <Base>
-      <Slider movies={featured.items} isLoading={featured.isPending} />
+      <Slider movies={featured.items} isLoading={featured.isLoading} />
       <Section>
         <Container>
           <Text variant="h4">Популярные</Text>
           <RowSlider
-            onAppearence={() => dispatch(getPopularMovies())}
+            onAppearence={() => dispatch(fetchPopular())}
             movies={popular.items}
-            isLoading={popular.isPending}
+            isLoading={popular.isLoading}
           />
         </Container>
       </Section>
@@ -39,9 +45,9 @@ const Home: React.FC = () => {
         <Container>
           <Text variant="h4">Топ 100</Text>
           <RowSlider
-            onAppearence={() => dispatch(getTopRatedMovies())}
+            onAppearence={() => dispatch(fetchTopRated())}
             movies={topRated.items}
-            isLoading={topRated.isPending}
+            isLoading={topRated.isLoading}
           />
         </Container>
       </Section>
@@ -49,9 +55,9 @@ const Home: React.FC = () => {
         <Container>
           <Text variant="h4">Сейчас в кино</Text>
           <RowSlider
-            onAppearence={() => dispatch(getPlayingMovies())}
+            onAppearence={() => dispatch(fetchPlaying())}
             movies={playing.items}
-            isLoading={playing.isPending}
+            isLoading={playing.isLoading}
           />
         </Container>
       </Section>
@@ -59,9 +65,9 @@ const Home: React.FC = () => {
         <Container>
           <Text variant="h4">Скоро в кино</Text>
           <RowSlider
-            onAppearence={() => dispatch(getUpcomingMovies())}
+            onAppearence={() => dispatch(fetchUpcoming())}
             movies={upcoming.items}
-            isLoading={upcoming.isPending}
+            isLoading={upcoming.isLoading}
           />
         </Container>
       </Section>

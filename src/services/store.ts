@@ -1,29 +1,37 @@
-import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { compose, createStore, applyMiddleware, AnyAction, Dispatch } from 'redux';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
-import rootReducer, { AppState } from './reducers';
+import { configureStore } from '@reduxjs/toolkit';
+import home from './slices/home';
+import movie from './slices/movie';
+import user from './slices/user';
+import { Middleware } from 'redux';
+import jwt from './middleware/jwt';
 
-const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && process.env.NODE_ENV === 'development'
-  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-  : compose;
+const store = configureStore({
+  devTools: process.env.NODE_ENV !== 'production',
+  reducer: {
+    home,
+    movie,
+    user
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .prepend(
+        jwt
+      )
+});
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
-const store = createStore(rootReducer, enhancer);
-
-type RootState = typeof store.getState;
+type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;
-type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, AnyAction>;
+type AppMiddleware = Middleware<{}, RootState>;
 
-const useAppDispatch = () => useDispatch();
-const useThunkDispatch = () => useDispatch<AppThunk>();
-const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
+const useAppDispatch = () => useDispatch<AppDispatch>();
+const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export {
   store,
   type RootState,
   type AppDispatch,
-  type AppThunk,
+  type AppMiddleware,
   useAppDispatch,
   useAppSelector,
-  useThunkDispatch
 };

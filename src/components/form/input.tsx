@@ -153,6 +153,12 @@ const Input = React.forwardRef<HTMLInputElement, TInputProps>(({
     }
   };
 
+  const handleIconClick = (e: React.SyntheticEvent) => {
+    if (onIconClick) {
+      onIconClick(e);
+    }
+  }
+
   return (
     <div className={className}>
       <InputWrapper onClick={() => forceFocus()} focus={focus} error={error}>
@@ -171,7 +177,7 @@ const Input = React.forwardRef<HTMLInputElement, TInputProps>(({
         <label>{placeholder}</label>
         {icon && (
           <InputIcon
-            {...(onIconClick && { onClick: onIconClick })}
+            onClick={handleIconClick}
           >
             {icon}
           </InputIcon>

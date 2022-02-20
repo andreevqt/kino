@@ -2,10 +2,11 @@ import React from 'react'
 import { Link, LinkProps, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-const NavLinkStyled = styled(Link) <{ active?: boolean }>`
+const NavLinkStyled = styled(Link) <{ $active?: boolean }>`
   font-weight: 500;
+  line-height: 1;
   padding: ${({ theme }) => `0 ${theme.spaces[3]}px`};
-  ${({ active, theme }) => active && `color: ${theme.colors.primary.base};`}
+  ${({ $active, theme }) => $active && `color: ${theme.colors.primary.base};`}
 `;
 
 type TNavLinkProps = LinkProps & { ignoreActive?: boolean };
@@ -15,7 +16,7 @@ const NavLink: React.FC<TNavLinkProps> = ({ to, ignoreActive = false, ...rest })
   return (
     <NavLinkStyled
       to={to}
-      {...(!ignoreActive && { active: !!match })}
+      {...(!ignoreActive && { $active: !!match })}
       {...rest}
     />
   );

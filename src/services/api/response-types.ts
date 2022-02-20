@@ -96,3 +96,35 @@ export type TTMDBResponse = {
 };
 
 export type TMoviesResponse = TTMDBResponse & { results: TMovies };
+
+export type TTokens = {
+  access: string;
+  refresh: string;
+};
+
+export type TUser = {
+  id: number;
+  name: string;
+  email: string;
+  image: any;
+};
+
+export type TLoginResponse = {
+  success: boolean;
+  user: TUser & { tokens: TTokens };
+};
+
+export type TLogoutResponse = {
+  success: boolean;
+  message: string;
+};
+
+export type TUserReponse = {
+  success: boolean;
+  user: TUser;
+};
+
+export type TRefreshResponse = {
+  success: boolean;
+  tokens: TTokens;
+};

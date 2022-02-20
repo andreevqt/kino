@@ -155,7 +155,8 @@ const Slider: React.FC<TSliderProps> = ({ movies, isLoading = false }) => {
           <StyledSwiper
             slidesPerView="auto"
             autoplay={{
-              delay: 6000
+              delay: 6000,
+              disableOnInteraction: false
             }}
             pagination={{
               clickable: true,

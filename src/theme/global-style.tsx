@@ -54,6 +54,7 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
   button {
     font-family: ${({ theme }) => `${theme.font.family}`};
     font-size: ${({ theme }) => `${theme.font.sizes[1]}px`};
+    line-height: 1;
     cursor: pointer;
   }
 
