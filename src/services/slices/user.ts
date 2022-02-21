@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, isFulfilled } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { user, TUser, TTokens } from '../api';
 import { RootState, AppDispatch } from '../store';
 import Cookie from 'js-cookie';
@@ -60,9 +60,9 @@ export const refresh = createAsyncThunk<TTokens | undefined, undefined, TConfig>
 export const getUser = createAsyncThunk<TUser | undefined, undefined, TConfig>(
   'user/get',
   async (arg, { getState }) => {
-    const token = getState().user.accessToken;
-    if (token) {
-      return user.get(token);
+    const { accessToken } = getState().user;
+    if (accessToken) {
+      return user.get();
     }
   }
 );

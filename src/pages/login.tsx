@@ -12,6 +12,7 @@ import Text from '../components/text/text';
 import Mail from '../icons/mail';
 import { AppDispatch, useAppDispatch, useAppSelector } from '../services/store';
 import { login } from '../services/slices/user';
+import Popup from '../components/popup/popup';
 
 const EMAIL_PATTERN = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -39,7 +40,8 @@ const Login: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<TFormValues>({
     mode: 'onTouched'
   });
-  const { user, isLoading } = useAppSelector((store) => ({ user: store.user.user, isLoading: store.user.isLoading }));
+
+  const { user, error, isLoading } = useAppSelector((store) => ({ user: store.user.user, isLoading: store.user.isLoading, error: store.user.error }));
 
   if (user) {
     return <Redirect to="/" />;
@@ -48,6 +50,7 @@ const Login: React.FC = () => {
   return (
     <LoginLayout background={bg}>
       <Container fullWidth gutter={false}>
+        {error && <Popup>{error}</Popup>}
         <Row $end $gutter={false}>
           <FormContainer md={6}>
             <Form onSubmit={handleSubmit((data) => dispatch(login(data)))}>
