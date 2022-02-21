@@ -54,10 +54,6 @@ requests.private.interceptors.request.use(
     return config;
   },
   (err) => {
-    if (axios.isCancel(err)) {
-      return;
-    }
-
     return Promise.reject(err);
   }
 );

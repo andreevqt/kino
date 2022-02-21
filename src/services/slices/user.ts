@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { user, TUser, TTokens } from '../api';
 import { RootState, AppDispatch } from '../store';
 import Cookie from 'js-cookie';
+import { setError } from './common';
 
 type TUserState = {
   user: {
@@ -27,44 +28,63 @@ const initialState: TUserState = {
 
 export const login = createAsyncThunk<TUser & { tokens: TTokens }, { email: string, password: string }, TConfig>(
   'user/login',
-  async (args) => {
-    const response = await user.login(args.email, args.password);
-    Cookie.set('refreshToken', response.tokens.refresh);
-    return response;
+  async (args, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await user.login(args.email, args.password);
+      Cookie.set('refreshToken', response.tokens.refresh);
+      return response;
+    } catch (err: any) {
+      dispatch(setError(err));
+      return rejectWithValue(err);
+    }
   }
 );
 
 export const logout = createAsyncThunk<void, () => void, TConfig>(
   'user/logout',
-  async (cb) => {
-    const token = Cookie.get('refreshToken');
-    if (token) {
-      user.logout(token);
+  async (cb, { dispatch, rejectWithValue }) => {
+    try {
+      const token = Cookie.get('refreshToken');
+      if (token) {
+        await user.logout(token);
+      }
+      Cookie.set('refreshToken', '');
+      cb();
+    } catch (err: any) {
+      dispatch(setError(err));
+      return rejectWithValue(err);
     }
-    cb();
   }
 );
 
 export const refresh = createAsyncThunk<TTokens | undefined, undefined, TConfig>(
   'user/refresh',
-  async () => {
-    const token = Cookie.get('refreshToken');
-    if (token) {
-      const tokens = await user.refresh(token);
-      Cookie.set('refreshToken', tokens.refresh);
-      return tokens;
+  async (arg, { rejectWithValue, dispatch }) => {
+    try {
+      const token = Cookie.get('refreshToken');
+      if (token) {
+        const tokens = await user.refresh(token);
+        Cookie.set('refreshToken', tokens.refresh);
+        return tokens;
+      }
+    } catch (err: any) {
+      dispatch(setError(err));
+      return rejectWithValue(err);
     }
   }
 );
 
 export const getUser = createAsyncThunk<TUser | undefined, undefined, TConfig>(
   'user/get',
-  async (arg, { getState }) => {
-    const { accessToken } = getState().user;
-    if (accessToken) {
-      return user.get();
-    }
-  }
+  async (arg, { getState, rejectWithValue, dispatch }) => user
+    .get()
+    .catch((err: any) => {
+      if (typeof err === 'string') {
+        return;
+      }
+      dispatch(setError(err));
+      return rejectWithValue(err);
+    })
 );
 
 export const userSlice = createSlice({
@@ -85,7 +105,6 @@ export const userSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.user = undefined;
       state.isLoading = false;
-      state.error = action.error.message;
     });
 
     // logout
@@ -94,7 +113,6 @@ export const userSlice = createSlice({
     });
     builder.addCase(logout.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -112,7 +130,6 @@ export const userSlice = createSlice({
     });
     builder.addCase(refresh.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message;
     });
 
     // get user
@@ -126,7 +143,6 @@ export const userSlice = createSlice({
     });
     builder.addCase(getUser.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message;
     });
   }
 });

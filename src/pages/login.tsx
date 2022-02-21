@@ -50,7 +50,6 @@ const Login: React.FC = () => {
   return (
     <LoginLayout background={bg}>
       <Container fullWidth gutter={false}>
-        {error && <Popup>{error}</Popup>}
         <Row $end $gutter={false}>
           <FormContainer md={6}>
             <Form onSubmit={handleSubmit((data) => dispatch(login(data)))}>

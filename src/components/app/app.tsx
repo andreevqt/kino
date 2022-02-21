@@ -4,12 +4,16 @@ import { GlobalStyle, ThemeProvider } from '../../theme';
 import { Home, Movie, Login, Logout } from '../../pages';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { getUser } from '../../services/slices/user';
+import { setError } from '../../services/slices/common';
+import Popup from '../popup/popup';
 
 const App = () => {
+  const lastErr = useAppSelector((store) => store.common.lastErr);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(getUser());
-  }, []);
+  });
 
   return (
     <ThemeProvider>
@@ -30,6 +34,7 @@ const App = () => {
           </Route>
         </Switch>
       </Router>
+      {lastErr && <Popup onClick={() => dispatch(setError(undefined))}>{lastErr}</Popup>}
     </ThemeProvider >
   );
 };

@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import home from './slices/home';
 import movie from './slices/movie';
 import user from './slices/user';
+import common from './slices/common';
 import { Middleware } from 'redux';
 
 const store = configureStore({
@@ -10,7 +11,8 @@ const store = configureStore({
   reducer: {
     home,
     movie,
-    user
+    user,
+    common
   }
  });
 

@@ -16,11 +16,11 @@ import {
 type TBackdropSizes = 300 | 780 | 1280 | 'original';
 type TPosterSizes = 92 | 154 | 185 | 342 | 500 | 780 | 'original';
 
-export const getBackdrop = (path: string | null, size: TBackdropSizes = 'original'): string => {
+export const getBackdrop = (path: string | null, size: TBackdropSizes = 'original') => {
   return path ? normalizeUrl(`https://image.tmdb.org/t/p/w${size}/${path}`) : '';
 };
 
-export const getPoster = (path: string | null, size: TPosterSizes = 'original'): string => {
+export const getPoster = (path: string | null, size: TPosterSizes = 'original') => {
   return path ? normalizeUrl(`https://image.tmdb.org/t/p/w${size}/${path}`) : '';
 };
 

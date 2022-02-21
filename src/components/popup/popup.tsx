@@ -5,14 +5,25 @@ import CrossOut from '../../icons/cross-out';
 type TPopupProps = {
   className?: string;
   iconSize?: string;
+  onClick?: (e: React.SyntheticEvent) => void;
 };
 
-const Popup: React.FC<TPopupProps> = ({ children, className, iconSize = '24' }) => {
+const Icon = styled.div`
+  top: calc(50% - 24px/2);
+  cursor: pointer;
+  font-size: 0;
+  position: absolute;
+  right: ${({ theme }) => theme.spaces[6]}px;
+`;
+
+const Popup: React.FC<TPopupProps> = ({ children, className, iconSize = '24', onClick }) => {
   return (
     <div
       className={className}
     >
-      <CrossOut width={iconSize} height={iconSize} />
+      <Icon onClick={onClick}>
+        <CrossOut width={iconSize} height={iconSize} />
+      </Icon>
       {children}
     </div>
   );
@@ -31,11 +42,6 @@ const StyledPopup = styled(Popup)`
     color: ${theme.colors.white.base};
     font-size: ${theme.font.sizes[2]}px;
     text-align: center;
-    svg {
-      position: absolute;
-      right: ${theme.spaces[6]}px;
-      top: calc(50% - 24px/2);
-    }
   `}
 ` ;
 
