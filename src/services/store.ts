@@ -1,13 +1,15 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import home from './slices/home';
 import movie from './slices/movie';
 import user from './slices/user';
 import common from './slices/common';
 import { Middleware } from 'redux';
+import error from './middleware/error';
 
 const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(error),
   reducer: {
     home,
     movie,

@@ -19,6 +19,9 @@ type TConfig = {
   dispatch: AppDispatch;
 };
 
+type TLogin = TUser & { tokens: TTokens };
+type TLoginArgs = { email: string, password: string };
+
 const initialState: TUserState = {
   user: undefined,
   accessToken: undefined,
@@ -26,7 +29,7 @@ const initialState: TUserState = {
   isLoading: false
 };
 
-export const login = createAsyncThunk<TUser & { tokens: TTokens }, { email: string, password: string }, TConfig>(
+export const login = createAsyncThunk<TLogin, TLoginArgs, TConfig>(
   'user/login',
   async (args, { dispatch, rejectWithValue }) => {
     try {

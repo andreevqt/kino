@@ -8,12 +8,12 @@ import { setError } from '../../services/slices/common';
 import Popup from '../popup/popup';
 
 const App = () => {
-  const lastErr = useAppSelector((store) => store.common.lastErr);
+  const { lastErr } = useAppSelector((store) => ({ lastErr: store.common.lastErr }));
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getUser());
-  });
+  }, []);
 
   return (
     <ThemeProvider>

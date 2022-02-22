@@ -13,7 +13,6 @@ export const commonSlice = createSlice({
   initialState,
   reducers: {
     setError: (state, action) => {
-      console.log(action);
       state.lastErr = action.payload;
     }
   }
