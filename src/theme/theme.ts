@@ -92,4 +92,6 @@ export type TTheme = {
   inputBgColorFocus: string;
   inputBorderColor: string;
   inputPlaceholderColor: string;
+
+  muted: string;
 };

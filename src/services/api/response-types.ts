@@ -1,7 +1,12 @@
+export type TGenre = {
+  id: number;
+  name: string;
+};
+
 export type TMovieData = {
   adult: boolean;
   backdrop_path: string;
-  genre_ids: number[];
+  genres: TGenre[];
   id: number;
   original_language: string;
   original_title: string;
@@ -13,11 +18,6 @@ export type TMovieData = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-};
-
-export type TGenre = {
-  id: number;
-  name: string;
 };
 
 export type TCompany = {

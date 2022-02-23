@@ -27,7 +27,7 @@ const DescriptionRow = styled.div`
 `;
 
 const DescriptionHeader = styled.div`
-  ${({ theme }) => `color: ${theme.colors.body.darkest};`}
+  ${({ theme }) => `color: ${theme.muted};`}
   flex: 0 0 30%;
 `;
 
@@ -223,7 +223,7 @@ const Movie: React.FC = () => {
                           Год выхода
                         </DescriptionHeader>
                         <DescriptionCell>
-                          {new Date(movie.release_date).getFullYear()}
+                          {movie.release_date}
                         </DescriptionCell>
                       </DescriptionRow>
                       <DescriptionRow>

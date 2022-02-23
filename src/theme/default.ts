@@ -95,7 +95,9 @@ const defaultTheme: TTheme = {
   inputBgColor: defaultColors.gray100,
   inputBgColorFocus: lighten(defaultColors.gray100, .4),
   inputBorderColor: darken(defaultColors.white, .7),
-  inputPlaceholderColor: darken(defaultColors.white, .4)
+  inputPlaceholderColor: darken(defaultColors.white, .4),
+
+  muted: darken(defaultColors.white, .4).toString()
 };
 
 export default defaultTheme;

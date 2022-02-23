@@ -3,13 +3,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useHistory } from 'react-router-dom';
 import { TMovieData, TMovies } from '../../services/api';
 import { Navigation, Autoplay, Pagination } from 'swiper';
-import Button from '../button/button';
 import Text from '../text/text';
 import styled from 'styled-components';
 import Skeleton from '../skeleton/skeleton';
 import left from '../../images/left.svg';
 import right from '../../images/right.svg';
-import color from 'color';
 
 const StyledSwiper = styled(Swiper)`
   margin-top: ${({ theme }) => `${theme.spaces[8]}px`};
@@ -115,14 +113,14 @@ const StyledSwiper = styled(Swiper)`
     margin: 0 6px !important;
     opacity: 1;
     border-radius: 3px;
-    background-color: ${({theme}) => theme.mainSliderBulletBg};
+    background-color: ${({ theme }) => theme.mainSliderBulletBg};
     &::before {
       display: block;
       content: ''; 
       left: 0;
       height: 100%;
       width: 0%;
-      background-color: ${({theme}) => theme.colors.primary.base};
+      background-color: ${({ theme }) => theme.colors.primary.base};
     }
   }
 
@@ -170,7 +168,7 @@ const Slider: React.FC<TSliderProps> = ({ movies, isLoading = false }) => {
             navigation={true}
           >
             {
-              movies.map(({ id, title, backdrop_path }) => (
+              movies.map(({ id, title, backdrop_path, genres, release_date }) => (
                 <SwiperSlide key={id}>
                   <div className="swiper-slide__inner">
                     <img
@@ -179,8 +177,10 @@ const Slider: React.FC<TSliderProps> = ({ movies, isLoading = false }) => {
                       src={backdrop_path}
                     />
                     <div className="swiper-slide__content">
-                      <Text variant="h1">{title}</Text>
-                      <Button size="big" onClick={() => history.push(`/movies/${id}`)}>Подробнее</Button>
+                      <Text variant="h1" className="mb-2">{title} ({release_date})</Text>
+                      <Text variant="display2" muted className="mb-0">
+                        {genres.map(({ name }) => name).join(', ')}
+                      </Text>
                     </div>
                   </div>
                 </SwiperSlide>

@@ -65,6 +65,7 @@ const getVariant = (variant: TextVariants) => {
     }
     case 'display1': {
       return css`
+        display: inline-block;
         font-weight: 500;
         font-size: ${({ theme }) => `${theme.font.sizes[3]}px`};
         margin-bottom: ${({ theme }) => `${theme.font.sizes[3]}px`};
@@ -72,6 +73,7 @@ const getVariant = (variant: TextVariants) => {
     }
     case 'display2': {
       return css`
+        display: inline-block;
         font-weight: 500;
         font-size: ${({ theme }) => `${theme.font.sizes[2]}px`};
         margin-bottom: ${({ theme }) => `${theme.font.sizes[3]}px`};
@@ -79,6 +81,7 @@ const getVariant = (variant: TextVariants) => {
     }
     case 'display3': {
       return css`
+        display: inline-block;
         font-weight: 500;
         font-size: ${({ theme }) => `${theme.font.sizes[0]}px`};
         margin-bottom: ${({ theme }) => `${theme.font.sizes[3]}px`};
@@ -93,21 +96,25 @@ const getVariant = (variant: TextVariants) => {
 type TStyledTextProps = {
   variant: TextVariants;
   muted?: boolean;
+  bold?: boolean;
 };
 
 const StyledText = styled.div<TStyledTextProps>`
-  ${({ variant }) => getVariant(variant)};
-  ${({ muted, theme }) => muted && `color: ${theme.colors.body.darkest};`}
+  ${({ muted, theme, bold, variant }) => css`
+    ${getVariant(variant)}
+    ${muted && `color: ${theme.muted};`}
+    ${bold && `font-weight: 700;`}
+  `}
 `;
 
 type TTextProps = TStyledTextProps & {
   className?: string;
 };
 
-const Text: React.FC<TTextProps> = ({ variant, children, className, muted = false }) => {
+const Text: React.FC<TTextProps> = ({ variant, children, className, muted = false, bold = false }) => {
   const el = elements[variant];
   return (
-    <StyledText variant={variant} as={el} className={className} muted={muted}>
+    <StyledText variant={variant} as={el} className={className} muted={muted} bold={bold}>
       {children}
     </StyledText>
   );

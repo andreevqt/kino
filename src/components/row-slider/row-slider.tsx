@@ -124,9 +124,9 @@ const StyledImageWrapper = styled.div`
 `;
 
 const StyledTitle = styled(Text)`
-  margin-bottom: 0;
+  margin-bottom: 4px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -154,14 +154,17 @@ type TMovieCardProps = {
 };
 
 const MovieCard: React.FC<TMovieCardProps> = ({ onClick, movie }) => (
-  <StyledCard {...(onClick && { onClick })}>
+  <StyledCard {...(onClick && { onClick })} title={movie.title}>
     <StyledImageWrapper >
       <LazyImg src={movie.poster_path} alt={movie.title} />
       <StyledTag>{movie.vote_average}</StyledTag>
     </StyledImageWrapper>
-    <StyledTitle variant='display2'>
+    <StyledTitle variant="display2">
       {movie.title}
     </StyledTitle>
+    <Text variant="display3" className="mb-0" muted>
+      {movie.genres.map((genre) => genre.name).join(', ')}
+    </Text>
   </StyledCard>
 );
 
