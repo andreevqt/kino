@@ -149,6 +149,11 @@ export type TCreateReviewResponse = {
   review: TReview;
 };
 
+export type TGetReviewResponse = {
+  success: boolean;
+  review: TReview;
+};
+
 export type TReviewsListResponse = {
   success: boolean;
   page: number;

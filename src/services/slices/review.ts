@@ -4,9 +4,11 @@ import {
   review,
   TLikeAddResponse,
   TCreateReviewAttrs,
-  TCreateReviewResponse
+  TCreateReviewResponse,
+  TReview
 } from '../api';
 import { setError } from './common';
+import { TGetReviewResponse } from '../api/response-types';
 
 type TConfig = {
   state: RootState;
@@ -21,7 +23,19 @@ export const create = createAsyncThunk<TCreateReviewResponse, TCreateReviewArgs,
   'review/create',
   async ({ movieId, ...rest }, thunkAPI) => {
     try {
-      const result = await review.create(movieId, rest);
+      return review.create(movieId, rest);
+    } catch (err: any) {
+      thunkAPI.dispatch(setError(err));
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+export const get = createAsyncThunk<TReview, number, TConfig>(
+  'review/get',
+  async (reviewId, thunkAPI) => {
+    try {
+      const { review: result } = await review.get(reviewId);
       return result;
     } catch (err: any) {
       thunkAPI.dispatch(setError(err));
@@ -36,6 +50,10 @@ type TReviewState = {
   },
   update: {
     isLoading: boolean;
+  },
+  single: {
+    isLoading: boolean;
+    review: TReview | undefined;
   }
 };
 
@@ -46,6 +64,10 @@ const initialState: TReviewState = {
   update: {
     isLoading: false
   },
+  single: {
+    isLoading: false,
+    review: undefined
+  }
 };
 
 export const reviewSlice = createSlice({
@@ -61,6 +83,18 @@ export const reviewSlice = createSlice({
     });
     builder.addCase(create.pending, (state, action) => {
       state.create.isLoading = true;
+    });
+
+    builder.addCase(get.fulfilled, (state, action) => {
+      const review = action.payload;
+      state.single.isLoading = false;
+      state.single.review = review;
+    });
+    builder.addCase(get.rejected, (state, action) => {
+      state.single.isLoading = false;
+    });
+    builder.addCase(get.pending, (state, action) => {
+      state.single.isLoading = true;
     });
 
   }

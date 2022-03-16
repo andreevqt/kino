@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import { usePageReloaded } from '../../hooks';
 import { Home, Movie, Login, Logout, Register, CreateReview } from '../../pages';
 import { TLocationState } from '../../types/common';
 import ProtectedRoute from '../protected-route/protected-route';
 import ReviewModal from '../review-modal/review-modal';
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
+import Review from '../../pages/review';
 
 const CustomSwitch: React.FC = () => {
   const location = useLocation<TLocationState>();
@@ -34,7 +34,7 @@ const CustomSwitch: React.FC = () => {
           <CreateReview />
         </ProtectedRoute>
         <Route path="/movies/:movieId/reviews/:reviewId" exact>
-          <CreateReview />
+          <Review />
         </Route>
       </Switch>
       {

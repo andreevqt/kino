@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import Text from '../text/text';
 import Heart from '../../icons/heart';
 import Star from '../../icons/star';
@@ -82,6 +82,14 @@ const StyledReviewLikeBtn = styled.div<{ active?: boolean }>`
   ${({ active, theme }) => active && `color: ${theme.colors.danger.base}`};
 `;
 
+const ReviewLink = styled(Link)`
+  ${({ theme }) => `
+    &:hover {
+      color: ${theme.colors.primary.base};
+    }
+  `}
+`;
+
 type TReviewLikeBtn = {
   active?: boolean;
   count?: number;
@@ -116,6 +124,7 @@ const ReviewBox: React.FC<TReviewBoxProps> = ({
     createdAt,
     title,
     content,
+    movieId,
     liked,
     likesCount
   },
@@ -129,19 +138,19 @@ const ReviewBox: React.FC<TReviewBoxProps> = ({
 
   const onLikeClick = () => {
     if (!user) {
-      history.push({ pathname: '/login', state: { from: location } });
+      history.push({
+        pathname: '/login',
+        state: { from: location }
+      });
       return;
     }
-
     dispatch(addLike(id));
   };
 
   return (
     <Panel className={!last ? 'mb-5' : ''}>
       <PanelHeader>
-        <Avatar
-          user={author}
-        />
+        <Avatar user={author} />
         <UserProfile
           name={author.name}
           reviewsCount={author.reviewsCount}
@@ -152,7 +161,9 @@ const ReviewBox: React.FC<TReviewBoxProps> = ({
         </ReviewMeta>
       </PanelHeader>
       <PanelBody>
-        <Text variant="h4">{title}</Text>
+        <ReviewLink to={`/movies/${movieId}/reviews/${id}`}>
+          <Text variant="h4">{title}</Text>
+        </ReviewLink>
         <ReadMore text={content} />
       </PanelBody>
       <PanelFooter>
@@ -161,9 +172,7 @@ const ReviewBox: React.FC<TReviewBoxProps> = ({
           active={liked}
           count={likesCount}
         />
-        <ReviewMetaBtn
-          icon={<CommentIcon width="16" height="16" />}
-        />
+        <ReviewMetaBtn icon={<CommentIcon width="16" height="16" />} />
       </PanelFooter>
     </Panel>
   );

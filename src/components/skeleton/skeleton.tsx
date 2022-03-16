@@ -47,24 +47,21 @@ const Skeleton: React.FC<TSkeletonProps> = ({
   variant = 'text',
   borderRadius = '8px',
   className
-}) => {
-
-  return (
-    <div className={className}>
-      {
-        [...Array(count)].map((elem, i) => (
-          <StyledSkeleton
-            key={i}
-            variant={variant}
-            margin={margin}
-            width={width}
-            height={height}
-            borderRadius={borderRadius}
-          />
-        ))
-      }
-    </div>
-  );
-};
+}) => (
+  <div className={className}>
+    {
+      [...Array(count)].map((elem, i) => (
+        <StyledSkeleton
+          key={i}
+          variant={variant}
+          margin={margin}
+          width={width}
+          height={height}
+          borderRadius={borderRadius}
+        />
+      ))
+    }
+  </div>
+);
 
 export default Skeleton;
