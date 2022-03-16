@@ -4,7 +4,7 @@ import { Container } from '../grid';
 
 const StyledHeader = styled.header<{ transparent?: boolean }>`
   background-color: ${({ theme, transparent }) => transparent ? 'transparent' : theme.colors.background.lightest};
-  padding: ${({theme}) => `${theme.spaces[5]}px 0`};
+  padding: ${({ theme }) => `${theme.spaces[5]}px 0`};
   & > ${Container} {
     display: flex;
     align-items: center;

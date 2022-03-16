@@ -23,7 +23,8 @@ const defaultTheme: TTheme = {
   },
 
   container: {
-    maxWidth: 1280
+    sm: 800,
+    md: 1280    
   },
 
   breakpoints: {
@@ -89,13 +90,15 @@ const defaultTheme: TTheme = {
 
   overlay: defaultColors.gray200,
 
-  mainSliderBulletBg: alpha(defaultColors.gray100, .4),
+  mainSliderBulletBg: alpha(defaultColors.gray100, .7),
 
   inputColor: defaultColors.white,
   inputBgColor: defaultColors.gray100,
   inputBgColorFocus: lighten(defaultColors.gray100, .4),
   inputBorderColor: darken(defaultColors.white, .7),
   inputPlaceholderColor: darken(defaultColors.white, .4),
+
+  borderColor: darken(defaultColors.white, .8),
 
   muted: darken(defaultColors.white, .4).toString()
 };

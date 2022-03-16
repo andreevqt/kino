@@ -10,7 +10,6 @@ type TUserState = {
     email: string;
   } | undefined,
   accessToken: string | undefined;
-  error: string | undefined;
   isLoading: boolean;
 };
 
@@ -22,18 +21,34 @@ type TConfig = {
 type TLogin = TUser & { tokens: TTokens };
 type TLoginArgs = { email: string, password: string };
 
+type TRegister = TLogin;
+type TRegisterArgs = TLoginArgs & { name: string };
+
 const initialState: TUserState = {
   user: undefined,
   accessToken: undefined,
-  error: undefined,
   isLoading: false
 };
 
 export const login = createAsyncThunk<TLogin, TLoginArgs, TConfig>(
   'user/login',
-  async (args, { dispatch, rejectWithValue }) => {
+  async ({ email, password }, { dispatch, rejectWithValue }) => {
     try {
-      const response = await user.login(args.email, args.password);
+      const response = await user.login(email, password);
+      Cookie.set('refreshToken', response.tokens.refresh);
+      return response;
+    } catch (err: any) {
+      dispatch(setError(err));
+      return rejectWithValue(err);
+    }
+  }
+);
+
+export const register = createAsyncThunk<TRegister, TRegisterArgs, TConfig>(
+  'user/register',
+  async ({ email, password, name }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await user.create(email, password, name);
       Cookie.set('refreshToken', response.tokens.refresh);
       return response;
     } catch (err: any) {
@@ -106,6 +121,21 @@ export const userSlice = createSlice({
       state.accessToken = user.tokens.access;
     });
     builder.addCase(login.rejected, (state, action) => {
+      state.user = undefined;
+      state.isLoading = false;
+    });
+
+    // register
+    builder.addCase(register.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(register.fulfilled, (state, action) => {
+      const user = action.payload;
+      state.isLoading = false;
+      state.user = { name: user.name, email: user.email }
+      state.accessToken = user.tokens.access;
+    });
+    builder.addCase(register.rejected, (state, action) => {
       state.user = undefined;
       state.isLoading = false;
     });

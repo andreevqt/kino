@@ -7,6 +7,7 @@ const Heart: React.FC<TIconProps & { active?: boolean }> = ({
   height = '24',
   className
 }) => {
+  console.log(active);
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

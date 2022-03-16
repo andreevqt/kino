@@ -1,22 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { alpha } from '../../theme/utils';
-
-const useCombinedRefs = <T extends {} = HTMLElement>(
-  ...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T>>
-): React.MutableRefObject<T | null> => {
-  const targetRef = React.useRef<T>(null);
-  React.useEffect(() => {
-    refs.forEach((ref) => {
-      if (typeof ref === 'function') {
-        ref(targetRef.current);
-      } else if (ref != null) {
-        (ref as React.MutableRefObject<T | null>).current = targetRef.current;
-      }
-    });
-  }, [refs]);
-  return targetRef;
-}
+import { useCombinedRefs } from '../../hooks';
 
 const InputIcon = styled.div`
   position: absolute;
@@ -27,7 +12,22 @@ const InputIcon = styled.div`
   color: ${({ theme }) => theme.inputPlaceholderColor};
 `;
 
-const StyledInput = styled.input`
+type TInputInnerProps = {
+  rows?: number;
+  [name: string]: any;
+}
+
+const InputInner = React.forwardRef<HTMLInputElement, TInputInnerProps>(({
+  rows,
+  ...rest
+}, ref) =>
+  rows
+    // @ts-ignore
+    ? <textarea {...rest} rows={rows} ref={ref} />
+    : <input  {...rest} ref={ref} />
+);
+
+const StyledInput = styled(InputInner)`
   width: 100%;
   line-height: 1.4;
   background-color: ${({ theme }) => theme.inputBgColor};
@@ -61,7 +61,7 @@ const InputWrapper = styled.div<{ focus?: boolean; error?: boolean }>`
     font-family: ${({ theme }) => theme.font.family};
     position: absolute;
     left: ${({ theme }) => `${theme.spaces[6]}px`};
-    bottom: ${({ theme }) => `${theme.spaces[4]}px`};
+    top: ${({ theme }) => `${theme.spaces[4]}px`};
     color: ${({ theme }) => theme.inputPlaceholderColor};
     background-color: ${({ theme }) => theme.inputBgColor};
   }
@@ -71,7 +71,10 @@ const InputWrapper = styled.div<{ focus?: boolean; error?: boolean }>`
       border-color: ${alpha(theme.colors.primary.base, .6)};
       box-shadow: 0 0 0 4px ${alpha(theme.colors.primary.base, .1)};
     `}
-    ${({ theme, error }) => error && `border-color: ${theme.colors.danger.base};`}
+    ${({ theme, error }) => error && `
+      border-color: ${theme.colors.danger.base};
+      box-shadow: 0 0 0 4px ${alpha(theme.colors.danger.base, .1)};
+    `}
   }
 
   label {
@@ -104,6 +107,7 @@ const Error = styled.div`
 
 export type TInputProps = {
   name: string;
+  rows?: number;
   type?: 'text' | 'email' | 'password';
   placeholder: string;
   className?: string;
@@ -131,7 +135,8 @@ const Input = React.forwardRef<HTMLInputElement, TInputProps>(({
   onBlur,
   error = false,
   errorText = 'Invalid property value',
-  type = 'text'
+  type = 'text',
+  rows
 }, forwardedRef) => {
   const [focus, setFocus] = useState(false);
   const innerRef = useRef<HTMLInputElement>(null);
@@ -166,6 +171,7 @@ const Input = React.forwardRef<HTMLInputElement, TInputProps>(({
           onFocus={handleFocus}
           onBlur={handleBlur}
           ref={ref}
+          rows={rows}
           name={name}
           type={type}
           placeholder={placeholder}

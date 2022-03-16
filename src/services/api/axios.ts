@@ -3,7 +3,7 @@ import { store } from '../store';
 import { decode } from '../jwt';
 import { refresh } from '../slices/user';
 
-const BASE_URL = 'https://api.kino-reaction.ru';
+const BASE_URL = 'http://localhost:3000';
 
 const isExpired = (token: string) => {
   const splited = token.split(' ')[1];
@@ -12,15 +12,19 @@ const isExpired = (token: string) => {
   return current > exp;
 };
 
+const headers = {
+  'Content-Type': 'application/json'
+};
+
 const requests = {
   public: axios.create({
     baseURL: BASE_URL,
-    headers: { 'Content-Type': 'application/json' }
+    headers
   }),
 
   private: axios.create({
     baseURL: BASE_URL,
-    headers: { 'Content-Type': 'application/json' }
+    headers
   })
 };
 
@@ -29,7 +33,7 @@ const errorHandler = (err: AxiosError) => {
   if (response) {
     return Promise.reject(response.data.message);
   }
-  
+
   return Promise.reject(err.message);
 };
 
@@ -37,6 +41,10 @@ requests.private.interceptors.request.use(
   async (config) => {
     const accessToken = store?.getState()?.user.accessToken;
     if (accessToken && !isExpired(accessToken)) {
+      if (config?.headers) {
+        config.headers['authorization'] = accessToken;
+      }
+
       return config;
     }
 
@@ -44,7 +52,7 @@ requests.private.interceptors.request.use(
 
     const newAccessToken = store?.getState()?.user.accessToken;
     if (!newAccessToken) {
-      throw new axios.Cancel('No access token present');
+      return config;
     }
 
     if (config?.headers) {

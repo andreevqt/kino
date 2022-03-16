@@ -22,8 +22,9 @@ export const createFetch = (entity: TEntity) => createAsyncThunk<TMovieData[], u
   async (arg, thunkAPI) => {
     try {
       const items = await movies[entity]();
-      return thunkAPI.fulfillWithValue(transformMovies(items), { type: entity });
+      return thunkAPI.fulfillWithValue(items, { type: entity });
     } catch (err: any) {
+      console.log(err);
       return thunkAPI.rejectWithValue(err.message, { type: entity });
     }
   },

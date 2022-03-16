@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { TMovieData, TMovies } from '../../services/api';
 import { Navigation, Autoplay, Pagination } from 'swiper';
 import Text from '../text/text';
@@ -106,28 +106,33 @@ const StyledSwiper = styled(Swiper)`
   }
 
   .swiper-pagination-bullet {
-    position: relative;
-    width: 100px;
-    height: 6px;
-    overflow: hidden;
-    margin: 0 6px !important;
-    opacity: 1;
-    border-radius: 3px;
-    background-color: ${({ theme }) => theme.mainSliderBulletBg};
-    &::before {
-      display: block;
-      content: ''; 
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background-color: ${({ theme }) => theme.colors.primary.base};
-    }
+    ${({ theme }) => `
+      position: relative;
+      width: 8px;
+      height: 8px;
+      overflow: hidden;
+      margin: 0 6px !important;
+      opacity: 1;
+      border-radius: 100px;
+      background-color: ${theme.mainSliderBulletBg};
+      transition: all 1s ease;
+      &::before {
+        display: block;
+        content: ''; 
+        left: 0;
+        height: 100%;
+        width: 0%;
+        background-color: ${theme.colors.primary.base};
+      }
+    `}
   }
 
   .swiper-pagination-bullet-active {
+    width: 70px;
     &::before {
       animation-name: countingBar;
-      animation-duration: 6s;
+      animation-delay: 1s;
+      animation-duration: 5s;
       animation-timing-function: ease-in;
       animation-iteration-count: 1;
       animation-direction: alternate ;
@@ -137,14 +142,33 @@ const StyledSwiper = styled(Swiper)`
   
 `;
 
+const SliderTitle = styled(Text).attrs(() => ({ variant: 'h1' }))`
+  margin-bottom: 0;
+`;
+
+const SliderDescription = styled(Text).attrs(() => ({ variant: 'display2', muted: true }))`
+  margin-bottom: 0;
+`;
+
+const StyledLink = styled(Link)`
+  ${({ theme }) => `
+    ${SliderTitle} {
+      transition: all .3s ease;
+    }
+    &:hover {
+      ${SliderTitle} {
+        color: ${theme.colors.primary.base};
+      }
+    }
+  `}
+`;
+
 type TSliderProps = {
   movies: TMovies;
   isLoading?: boolean;
 };
 
 const Slider: React.FC<TSliderProps> = ({ movies, isLoading = false }) => {
-  const history = useHistory();
-
   return (
     <div style={{ minHeight: '700px' }}>{
       isLoading
@@ -177,10 +201,13 @@ const Slider: React.FC<TSliderProps> = ({ movies, isLoading = false }) => {
                       src={backdrop_path}
                     />
                     <div className="swiper-slide__content">
-                      <Text variant="h1" className="mb-2">{title} ({release_date})</Text>
-                      <Text variant="display2" muted className="mb-0">
-                        {genres.map(({ name }) => name).join(', ')}
-                      </Text>
+                      <StyledLink to={`/movies/${id}`}>
+                        <SliderTitle>{title} ({release_date})</SliderTitle>
+                        <SliderDescription>
+                          {genres.map(({ name }) => name).join(', ')}
+                        </SliderDescription>
+                      </StyledLink>
+
                     </div>
                   </div>
                 </SwiperSlide>

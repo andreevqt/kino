@@ -65,6 +65,11 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     }
   }
 
+  .modal-is-shown {
+    overflow-y: hidden;
+    padding-right: 17px;
+  }
+
   .d-block {
     display: block;
   }
@@ -81,6 +86,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
     align-items: center;
   }
 
+  .jcc {
+    justify-content: center;
+  }
+
   .fontless {
     font-size: 0;
   }
@@ -95,6 +104,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
 
   .mt-5 {
     margin-top: ${({theme}) => `${theme.spaces[5]}px`} !important;
+  }
+
+  .mt-10 {
+    margin-top: ${({theme}) => `${theme.spaces[10]}px`} !important;
   }
 
   .mb-0 {

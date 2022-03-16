@@ -133,6 +133,12 @@ const StyledTitle = styled(Text)`
   transition: all .2s ease;
 `;
 
+const StyledDescription = styled(Text)`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`
+
 const StyledCard = styled.div`
   cursor: pointer;
   padding: 0 5px;
@@ -162,9 +168,9 @@ const MovieCard: React.FC<TMovieCardProps> = ({ onClick, movie }) => (
     <StyledTitle variant="display2">
       {movie.title}
     </StyledTitle>
-    <Text variant="display3" className="mb-0" muted>
+    <StyledDescription variant="display3" className="mb-0" muted>
       {movie.genres.map((genre) => genre.name).join(', ')}
-    </Text>
+    </StyledDescription>
   </StyledCard>
 );
 
@@ -225,7 +231,9 @@ const RowSlider: React.FC<TRowSliderProps> = ({
             ? renderSkeleton(perView)
             : movies.map((movie) => (
               <SwiperSlide key={movie.id}>
-                <MovieCard movie={movie} onClick={() => history.replace({ pathname: `/movies/${movie.id}` })} />
+                <MovieCard movie={movie} onClick={() => history.push({
+                  pathname: `/movies/${movie.id}`
+                })} />
               </SwiperSlide>
             ))
         }

@@ -4,6 +4,7 @@ import home from './slices/home';
 import movie from './slices/movie';
 import user from './slices/user';
 import common from './slices/common';
+import review from './slices/review';
 import { Middleware } from 'redux';
 import error from './middleware/error';
 
@@ -14,9 +15,10 @@ const store = configureStore({
     home,
     movie,
     user,
-    common
+    common,
+    review
   }
- });
+});
 
 type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;

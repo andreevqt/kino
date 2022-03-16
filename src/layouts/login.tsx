@@ -1,11 +1,17 @@
 import React from 'react';
-import Base from './base';
 import { Link } from 'react-router-dom';
-import Logo from '../icons/logo';
-import Header from '../components/header/base';
 import styled from 'styled-components';
-import { Nav } from '../components/nav/nav';
-import Button from '../components/button/button';
+import { Col, Container, Row } from '../components/grid';
+import Logo from '../icons/logo';
+
+const FormContainer = styled(Col)`
+  background-color: ${({ theme }) => theme.colors.background.base};
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Background = styled.div<{ background: string }>`
   position: absolute;
@@ -18,6 +24,15 @@ const Background = styled.div<{ background: string }>`
   background-image: ${({ background }) => `url('${background}')`};
 `;
 
+const LogoLink = styled(Link)`
+  ${({ theme }) => `
+    position: absolute;
+    font-size: 0;
+    top: ${theme.spaces[10]}px;
+    left: ${theme.spaces[10]}px;
+  `} 
+`;
+
 type TLoginProps = {
   background: string;
 };
@@ -25,8 +40,17 @@ type TLoginProps = {
 const Login: React.FC<TLoginProps> = ({ background, children }) => {
   return (
     <>
+      <LogoLink to="/">
+        <Logo />
+      </LogoLink>
       <Background background={background} />
-      {children}
+      <Container fullWidth gutter={false}>
+        <Row $end $gutter={false}>
+          <FormContainer md={6}>
+            {children}
+          </FormContainer>
+        </Row>
+      </Container>
     </>
   );
 };

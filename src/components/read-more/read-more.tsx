@@ -28,7 +28,7 @@ const ReadMore: React.FC<TReadMoreProps> = ({
           isShown ? text : text.slice(0, limit)
         }
       </Text>
-      {!isShown && (
+      {!isShown && (text.length >= limit) && (
         <StyledButton
           type="button"
           onClick={() => setIsShown(true)}

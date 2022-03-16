@@ -16,13 +16,7 @@ const fetchPlaying = createFetch('playing');
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { featured, popular, topRated, upcoming, playing } = useAppSelector((store) => ({
-    featured: store.home.featured,
-    popular: store.home.popular,
-    playing: store.home.playing,
-    topRated: store.home.topRated,
-    upcoming: store.home.upcoming
-  }));
+  const { featured, popular, topRated, upcoming, playing } = useAppSelector((store) => store.home);
 
   useEffect(() => {
     dispatch(fetchFeatured());

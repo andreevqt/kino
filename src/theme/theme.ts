@@ -7,7 +7,8 @@ export type TColor = {
 };
 
 export type TContainer = {
-  maxWidth: number;
+  sm: number;
+  md: number;
 };
 
 export type TFont = {
@@ -92,6 +93,8 @@ export type TTheme = {
   inputBgColorFocus: string;
   inputBorderColor: string;
   inputPlaceholderColor: string;
+
+  borderColor: string;
 
   muted: string;
 };

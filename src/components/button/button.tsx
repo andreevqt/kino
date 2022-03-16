@@ -1,6 +1,7 @@
-import React, { Children, SyntheticEvent } from 'react';
+import React, { SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { alpha } from '../../theme/utils';
 import Loader from '../../icons/loader';
 
 type THtmlTypes = 'button' | 'submit' | 'reset';
@@ -59,6 +60,9 @@ const getButtonVariant = (variant: TButtonVariant) => {
           background-color: ${theme.colors.primary.base};
           border: 1px solid ${theme.colors.primary.base};
           color: ${theme.colors.background.base};
+          &:focus {
+            box-shadow: 0 0 0 3.2px ${alpha(theme.colors.primary.base, .5)};
+          }
           &:hover {
             background-color: ${theme.colors.primary.light};
             border-color: ${theme.colors.primary.light};
@@ -75,6 +79,9 @@ const getButtonVariant = (variant: TButtonVariant) => {
           background-color: ${theme.colors.secondary.base};
           border:1px solid ${theme.colors.secondary.base};
           color: ${theme.colors.body.base};
+          &:focus {
+            box-shadow: 0 0 0 3.2px ${alpha(theme.colors.secondary.base, .5)};
+          }
           &:hover {
             background-color: ${theme.colors.secondary.lightest};
             border-color: ${theme.colors.secondary.lightest};
@@ -146,6 +153,7 @@ const Button = styled(ButtonComponent) <TStyledButtonProps>`
     justify-content: center;
     transition: all .2s ease;
     font-weight: 500;
+    line-height: 1;
     letter-spacing: .4px;
     width: ${fullWidth ? '100%' : 'auto'};
     ${loading && `pointer-events: none;`}

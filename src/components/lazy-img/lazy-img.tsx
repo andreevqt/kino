@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import LazyLoad from 'vanilla-lazyload';
 
-if (typeof document !== "undefined" && !document.lazyLoadInstance) {
+if (!document.lazyLoadInstance) {
   document.lazyLoadInstance = new LazyLoad({
-    elements_selector: '.lazy',
-   
+    elements_selector: '.lazy'
   });
 }
 
@@ -39,9 +38,7 @@ const LazyImg: React.FC<TLazyImgProps> = ({
   const el = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.lazyLoadInstance.update();
-    }
+    document.lazyLoadInstance.update();
 
     if (el.current) {
       el.current.addEventListener('load', onLoad);
@@ -56,17 +53,17 @@ const LazyImg: React.FC<TLazyImgProps> = ({
 
   useEffect(() => {
     return () => {
-      if (typeof document !== 'undefined') {
-        document.lazyLoadInstance.update();
-      }
+      document.lazyLoadInstance.update();
     }
   });
+
+  const svgPlaceholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${placeholder.width}' height='${placeholder.height}' fill='%231f2125'%3E%3Crect x='0' y='0' width='100%25' height='100%25'/%3E%3C/svg%3E`;
 
   return (
     <img
       ref={el}
       alt={alt}
-      src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${placeholder.width}' height='${placeholder.height}' fill='%231f2125'%3E%3Crect x='0' y='0' width='100%25' height='100%25'/%3E%3C/svg%3E`}
+      src={svgPlaceholder}
       data-src={src}
       data-srcset={srcset}
       data-sizes={sizes}

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TMovieData, TMovieDataFull, movies } from '../api';
+import { TMovieData, TMovieDataFull, movies, TReviewsListResponse, TReview, TLikeAddResponse, review } from '../api';
 import { RootState, AppDispatch } from '../store';
-import { transformMovie, transformMovies } from '../transforms';
+import { setError } from './common';
 
 type TConfig = {
   state: RootState;
@@ -10,46 +10,96 @@ type TConfig = {
 
 export const fetchMovie = createAsyncThunk<TMovieDataFull, number, TConfig>(
   'movie/get',
-  async (id, thunkAPI) => {
-    return transformMovie(await movies.get(id));
+  async (id, { dispatch, rejectWithValue }) => movies
+    .get(id).catch((err) => {
+      dispatch(setError(err));
+      return rejectWithValue(err);
+    })
+);
+
+export const fetchReviews = createAsyncThunk<TReviewsListResponse, number, TConfig>(
+  'movie/reviews',
+  async (id, { getState, dispatch, rejectWithValue }) => {
+    const { page } = getState().movie.reviews;
+    try {
+      return movies.reviews(id, page);
+    } catch (err) {
+      dispatch(setError(err));
+      return rejectWithValue(err);
+    }
+  },
+  {
+    condition: (id, { getState }) => {
+      const { hasMore } = getState().movie.reviews;
+      return hasMore;
+    }
   }
 );
 
 export const fetchSimilar = createAsyncThunk<TMovieData[], number, TConfig>(
   'movie/fetchSimilar',
   async (id) => {
-    const similar = await movies.similar(id);
-    return transformMovies(similar.results);
+    return movies.similar(id);
+  }
+);
+
+export const addLike = createAsyncThunk<TLikeAddResponse | undefined, number, TConfig>(
+  'movie/like/add',
+  async (reviewId, { getState, dispatch, rejectWithValue }) => {
+    const { user } = getState().user;
+    if (!user) {
+      return;
+    }
+
+    try {
+      const result = await review.like.add(reviewId);
+      return result;
+    } catch (err: any) {
+      dispatch(setError(err));
+      return rejectWithValue(err);
+    }
   }
 );
 
 type TMovieState = {
   isLoading: boolean;
   data: TMovieDataFull | undefined;
-  error: string | undefined;
 };
 
 type TSimilarState = {
   isLoading: boolean;
   items: TMovieData[];
-  error: string | undefined;
+};
+
+type TReviewsState = {
+  isLoading: boolean;
+  items: TReview[];
+  page: number;
+  hasMore: boolean;
+  loaded: boolean;
 };
 
 export type TMovieStateOuter = {
   movie: TMovieState;
   similar: TSimilarState;
+  reviews: TReviewsState;
 };
 
 const initialState: TMovieStateOuter = {
   movie: {
     data: undefined,
     isLoading: false,
-    error: undefined
   },
   similar: {
     items: [],
     isLoading: false,
-    error: undefined
+  },
+  reviews: {
+    items: [],
+    page: 1,
+    hasMore: true,
+    isLoading: false,
+    loaded: false
   }
 };
 
@@ -58,7 +108,7 @@ export const movieSlice = createSlice({
   initialState,
   reducers: {
     onPageUnload: (state) => {
-      state = initialState;
+      return initialState;
     }
   },
   extraReducers: (builder) => {
@@ -69,11 +119,11 @@ export const movieSlice = createSlice({
     builder.addCase(fetchMovie.rejected, (state, action) => {
       state.movie.isLoading = false;
       state.movie.data = undefined;
-      state.movie.error = action.error.message;
     });
     builder.addCase(fetchMovie.pending, (state, action) => {
       state.movie.isLoading = true;
     });
+
     builder.addCase(fetchSimilar.fulfilled, (state, action) => {
       state.similar.isLoading = false;
       state.similar.items = action.payload;
@@ -81,10 +131,41 @@ export const movieSlice = createSlice({
     builder.addCase(fetchSimilar.rejected, (state, action) => {
       state.similar.isLoading = false;
       state.similar.items = [];
-      state.similar.error = action.error.message;
     });
     builder.addCase(fetchSimilar.pending, (state, action) => {
       state.similar.isLoading = true;
+    });
+
+    builder.addCase(fetchReviews.fulfilled, ({ reviews }, action) => {
+      const { results, page, totalPages } = action.payload;
+
+      reviews.isLoading = false;
+      reviews.items = [...reviews.items, ...results];
+
+      if (reviews.page < totalPages) {
+        reviews.page++;
+      }
+
+      reviews.hasMore = totalPages !== page;
+      reviews.loaded = true;
+    });
+    builder.addCase(fetchReviews.rejected, ({ reviews }, action) => {
+      reviews.isLoading = false;
+      reviews.items = [];
+      reviews.page = 1;
+    });
+    builder.addCase(fetchReviews.pending, ({ reviews }, action) => {
+      reviews.isLoading = true;
+    });
+
+    //like
+    builder.addCase(addLike.fulfilled, ({ reviews }, action) => {
+      const id = action.meta.arg
+      const review = reviews.items.find((review) => review.id === id);
+      if (review) {
+        review.liked = !review.liked;
+        review.likesCount = review.liked ? review.likesCount + 1 : review.likesCount - 1;
+      }
     });
   }
 });

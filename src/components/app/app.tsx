@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { GlobalStyle, ThemeProvider } from '../../theme';
-import { Home, Movie, Login, Logout } from '../../pages';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { getUser } from '../../services/slices/user';
 import { setError } from '../../services/slices/common';
 import Popup from '../popup/popup';
+import CustomSwitch from '../custom-switch/custom-switch';
 
 const App = () => {
-  const { lastErr } = useAppSelector((store) => ({ lastErr: store.common.lastErr }));
+  const lastErr = useAppSelector((store) => store.common.lastErr);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -19,22 +19,17 @@ const App = () => {
     <ThemeProvider>
       <GlobalStyle />
       <Router>
-        <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
-          <Route path="/login" exact>
-            <Login />
-          </Route>
-          <Route path="/logout" exact>
-            <Logout />
-          </Route>
-          <Route path="/movies/:movieId">
-            <Movie />
-          </Route>
-        </Switch>
+        <CustomSwitch />
       </Router>
-      {lastErr && <Popup onClick={() => dispatch(setError(undefined))}>{lastErr}</Popup>}
+      {
+        lastErr && (
+          <Popup
+            onClick={() => dispatch(setError(null))}
+          >
+            {lastErr}
+          </Popup>
+        )
+      }
     </ThemeProvider >
   );
 };

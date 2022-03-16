@@ -13,6 +13,7 @@ const Icon = styled.div`
   cursor: pointer;
   font-size: 0;
   position: absolute;
+  z-index: 999999;
   right: ${({ theme }) => theme.spaces[6]}px;
 `;
 

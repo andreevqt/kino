@@ -107,6 +107,7 @@ export type TUser = {
   name: string;
   email: string;
   image: any;
+  reviewsCount: number;
 };
 
 export type TLoginResponse = {
@@ -124,7 +125,39 @@ export type TUserReponse = {
   user: TUser;
 };
 
+export type TCreateUserReponse = TLoginResponse;
+
 export type TRefreshResponse = {
   success: boolean;
   tokens: TTokens;
+};
+
+export type TReview = {
+  id: number;
+  title: string;
+  rating: number;
+  movieId: number;
+  content: string;
+  author: TUser;
+  liked: boolean;
+  likesCount: number;
+  createdAt: string;
+};
+
+export type TCreateReviewResponse = {
+  success: boolean;
+  review: TReview;
+};
+
+export type TReviewsListResponse = {
+  success: boolean;
+  page: number;
+  total: number;
+  totalPages: number;
+  results: TReview[];
+};
+
+export type TLikeAddResponse = {
+  success: boolean;
+  message: string;
 };

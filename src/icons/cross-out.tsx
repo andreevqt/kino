@@ -3,13 +3,17 @@ import { TIconProps } from '../types/common';
 
 const CrossOut: React.FC<TIconProps> = ({
   width = '24',
-  height = '24'
+  height = '24',
+  className,
+  onClick
 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={width}
-      height={width}
+      height={height}
+      className={className}
+      onClick={onClick}
       fill="currentColor"
       viewBox="0 0 24 24"
     >
