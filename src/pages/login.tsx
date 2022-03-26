@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { Formik, Form } from 'formik';
+import Yup from '../services/yup';
 import LoginLayout from '../layouts/login';
 import bg from '../images/bg-min.jpg'
 import styled from 'styled-components';
@@ -11,10 +12,14 @@ import Text from '../components/text/text';
 import Mail from '../icons/mail';
 import { useAppDispatch, useAppSelector } from '../services/store';
 import { login } from '../services/slices/user';
-import { EMAIL_PATTERN } from '../constants';
 import { TLocationState } from '../types/common';
 
-const Form = styled.form`
+const validationSchema = Yup.object({
+  email: Yup.string().label('E-mail').email().required(),
+  password: Yup.string().label('Пароль').required()
+});
+
+const StyledForm = styled(Form)`
   flex: 0 1 500px;
 `;
 
@@ -23,55 +28,78 @@ type TFormValues = {
   password: string;
 };
 
+const initialValues: TFormValues = {
+  email: '',
+  password: ''
+};
+
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation<TLocationState>();
-
-  const { register, handleSubmit, formState: { errors } } = useForm<TFormValues>({
-    mode: 'onTouched'
-  });
-
-  const { user, isLoading } = useAppSelector((store) => ({ user: store.user.user, isLoading: store.user.isLoading }));
+  const { user } = useAppSelector((store) => store.user);
 
   if (user) {
-    if (user) {
-      return (
-        <Redirect
-          to={{
-            pathname: location.state?.from?.pathname || '/',
-            ...(location.state && { state: location.state.from?.state })
-          }}
-        />
-      );
-    }
+    return (
+      <Redirect
+        to={{
+          pathname: location.state?.from?.pathname || '/',
+          ...(location.state && { state: location.state.from?.state })
+        }}
+      />
+    );
   }
 
   return (
     <LoginLayout background={bg}>
-      <Form onSubmit={handleSubmit((data) => dispatch(login(data)))}>
-        <Text variant="h3" className="mb-10">Добро пожаловать!</Text>
-        <Input
-          placeholder="E-mail"
-          className="mb-5"
-          type="email"
-          icon={<Mail width="16" height="16" />}
-          error={!!errors.email}
-          errorText={errors?.email?.message}
-          {...register('email', { required: 'Требуемое поле', pattern: { value: EMAIL_PATTERN, message: 'Должен быть корректный email' } })}
-        />
-        <PasswordInput
-          placeholder="Пароль"
-          className="mb-5"
-          error={!!errors.password}
-          errorText={errors?.password?.message}
-          {...register('password', { required: 'Требуемое поле' })}
-        />
-        <Text variant="paragraph" className="mb-10 d-flex">Нет аккаунта?&nbsp;
-          <Link to="/register" className="link">Регистрация</Link>
-          <Link to="/forgot-password" className="link ml-auto">Забыли пароль?</Link>
-        </Text>
-        <Button type="submit" size="big" fullWidth loading={isLoading}>Войти</Button>
-      </Form>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={(data, { setSubmitting }) => dispatch(login(data))
+          .then(() => setSubmitting(false))
+        }
+      >
+        {
+          ({
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            values,
+            isSubmitting
+          }) => (
+            <StyledForm>
+              <Text variant="h3" className="mb-10">Добро пожаловать!</Text>
+              <Input
+                name="email"
+                placeholder="E-mail"
+                className="mb-5"
+                type="email"
+                icon={<Mail width="16" height="16" />}
+                error={!!(touched.email && errors.email)}
+                errorText={errors?.email}
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <PasswordInput
+                name="password"
+                placeholder="Пароль"
+                className="mb-5"
+                error={!!(touched.password && errors.password)}
+                errorText={errors?.password}
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Text variant="paragraph" className="mb-10 d-flex">Нет аккаунта?&nbsp;
+                <Link to="/register" className="link">Регистрация</Link>
+                <Link to="/forgot-password" className="link ml-auto">Забыли пароль?</Link>
+              </Text>
+              <Button type="submit" size="big" fullWidth loading={isSubmitting}>Войти</Button>
+            </StyledForm>
+          )
+        }
+      </Formik>
     </LoginLayout>
   );
 };

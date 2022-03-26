@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { useForm } from "react-hook-form";
+import { Formik, Form } from 'formik';
+import Yup from '../services/yup';
 import LoginLayout from '../layouts/login';
 import bg from '../images/register.jpg'
 import styled from 'styled-components';
@@ -10,12 +11,15 @@ import Button from '../components/button/button';
 import Text from '../components/text/text';
 import Mail from '../icons/mail';
 import { useAppDispatch, useAppSelector } from '../services/store';
-import { register as registerThunk } from '../services/slices/user';
-import { EMAIL_PATTERN } from '../constants';
+import { register } from '../services/slices/user';
 
-const Form = styled.form`
+const validationSchema = Yup.object({
+  email: Yup.string().label('E-mail').email().required(),
+  password: Yup.string().label('Пароль').required()
+});
+
+const StyledForm = styled(Form)`
   flex: 0 1 500px;
-  border-radius: 20px;
 `;
 
 type TFormValues = {
@@ -24,20 +28,15 @@ type TFormValues = {
   password: string;
 };
 
+const initialValues: TFormValues = {
+  email: '',
+  name: '',
+  password: ''
+};
+
 const Register: React.FC = () => {
   const dispatch = useAppDispatch();
-
-  const {
-    register,
-    handleSubmit,
-    formState: {
-      errors
-    }
-  } = useForm<TFormValues>({
-    mode: 'onTouched'
-  });
-
-  const { user, isLoading } = useAppSelector((store) => store.user);
+  const { user } = useAppSelector((store) => store.user);
 
   if (user) {
     return <Redirect to="/" />;
@@ -45,37 +44,76 @@ const Register: React.FC = () => {
 
   return (
     <LoginLayout background={bg}>
-      <Form onSubmit={handleSubmit((data) => dispatch(registerThunk(data)))}>
-        <Text variant="h3" className="mb-10">Регистрация аккаунта</Text>
-        <Input
-          placeholder="E-mail"
-          className="mb-5"
-          type="email"
-          icon={<Mail width="16" height="16" />}
-          error={!!errors.email}
-          errorText={errors?.email?.message}
-          {...register('email', { required: 'Требуемое поле', pattern: { value: EMAIL_PATTERN, message: 'Должен быть корректный email' } })}
-        />
-        <PasswordInput
-          placeholder="Пароль"
-          className="mb-5"
-          error={!!errors.password}
-          errorText={errors?.password?.message}
-          {...register('password', { required: 'Требуемое поле' })}
-        />
-        <Input
-          placeholder="Имя"
-          className="mb-5"
-          type="text"
-          error={!!errors.name}
-          errorText={errors?.name?.message}
-          {...register('name', { required: 'Требуемое поле' })}
-        />
-        <Text variant="paragraph" className="mb-10 d-flex">Уже есть аккаунт?&nbsp;
-          <Link to="/login" className="link">Войти</Link>
-        </Text>
-        <Button type="submit" size="big" fullWidth loading={isLoading}>Отправить</Button>
-      </Form>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={(data, { setSubmitting }) => dispatch(register(data))
+          .then(() => setSubmitting(false))
+        }
+      >
+        {
+          ({
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            values,
+            isSubmitting
+          }) => (
+            <StyledForm>
+              <Text variant="h3" className="mb-10">Регистрация аккаунта</Text>
+              <Input
+                name="email"
+                placeholder="E-mail"
+                className="mb-5"
+                type="email"
+                icon={<Mail width="16" height="16" />}
+                error={!!(touched.email && errors.email)}
+                errorText={errors?.email}
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <PasswordInput
+                name="password"
+                placeholder="Пароль"
+                className="mb-5"
+                error={!!(touched.password && errors.password)}
+                errorText={errors?.password}
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Input
+                name="name"
+                placeholder="Имя"
+                className="mb-5"
+                type="text"
+                error={!!(touched.name && errors.name)}
+                errorText={errors?.name}
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Text
+                variant="paragraph"
+                className="mb-10 d-flex"
+              >
+                Уже есть аккаунт?&nbsp;
+                <Link to="/login" className="link">Войти</Link>
+              </Text>
+              <Button
+                type="submit"
+                size="big"
+                fullWidth
+                loading={isSubmitting}
+              >
+                Зарегистрироваться
+              </Button>
+            </StyledForm>
+          )
+        }
+      </Formik>
     </LoginLayout>
   );
 };

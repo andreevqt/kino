@@ -1,9 +1,10 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { Formik, Form } from 'formik';
+import Yup from '../../services/yup';
 import { create } from '../../services/slices/review';
-import { useAppDispatch, useAppSelector } from '../../services/store';
+import { useAppDispatch } from '../../services/store';
 import Button from '../button/button';
 import Input from '../form/input';
 import Rating from '../form/rating';
@@ -20,66 +21,85 @@ type TFormValues = {
   rating: number;
 };
 
+const initialValues: TFormValues = {
+  title: '',
+  content: '',
+  rating: 10
+};
+
+const validationSchema = Yup.object({
+  title: Yup.string().label('Заголовок').required(),
+  content: Yup.string().label('Текст').required(),
+  rating: Yup.number().min(1).max(10)
+});
+
 const CreateReview: React.FC = () => {
   const history = useHistory();
   const { movieId } = useParams<{ movieId: string }>();
 
-  const { isLoading } = useAppSelector((store) => store.review.create);
   const dispatch = useAppDispatch();
-
-  const { register, control, handleSubmit, formState: {
-    errors
-  } } = useForm<TFormValues>({
-    mode: 'onTouched',
-    defaultValues: {
-      title: '',
-      content: '',
-      rating: 10
-    }
-  });
-
-  const onSubmit = (data: TFormValues) => {
-    dispatch(create({ movieId: +movieId, ...data }))
-      .then(() => history.goBack());
-  };
 
   return (
     <>
       <Text variant="h3" className="mt-10 mb-10">Новая рецензия</Text>
-      <form onSubmit={handleSubmit(onSubmit)} >
-        <Controller
-          control={control}
-          name="rating"
-          render={({ field: { onChange, onBlur, value, ref } }) => (
-            <Rating
-              className="mb-10"
-              label="Рейтинг"
-              onChange={onChange}
-              value={value}
-            />
-          )}
-        />
-        <Input
-          placeholder="Заголовок"
-          className="mb-5"
-          error={!!errors.title}
-          errorText={errors?.title?.message}
-          {...register('title', { required: 'Требуемое поле' })}
-        />
-        <Input
-          placeholder="Текст"
-          className="mb-10"
-          rows={10}
-          error={!!errors.content}
-          errorText={errors?.content?.message}
-          {...register('content', { required: 'Требуемое поле' })}
-        />
-        <Buttons>
-          <Button type="submit" size="big" loading={isLoading}>
-            Опубликовать
-          </Button>
-        </Buttons>
-      </form>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={(data, { setSubmitting }) => dispatch(create({
+          movieId: +movieId,
+          ...data
+        })).then(() => {
+          setSubmitting(false);
+          history.goBack();
+        })}
+      >
+        {
+          ({
+            errors,
+            touched,
+            setFieldValue,
+            handleChange,
+            handleBlur,
+            values,
+            isSubmitting
+          }) => (
+            <Form>
+              <Rating
+                className="mb-10"
+                label="Рейтинг"
+                onChange={(value) => setFieldValue('rating', value)}
+                value={values.rating}
+              />
+              <Input
+                placeholder="Заголовок"
+                className="mb-5"
+                error={!!(touched.title && errors.title)}
+                errorText={errors?.title}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                name="title"
+                value={values.title}
+              />
+              <Input
+                placeholder="Текст"
+                className="mb-10"
+                rows={10}
+                error={!!(touched.content && errors.content)}
+                errorText={errors?.content}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                name="content"
+                value={values.content}
+              />
+              <Buttons>
+                <Button type="submit" size="big" loading={isSubmitting}>
+                  Опубликовать
+                </Button>
+              </Buttons>
+            </Form>
+          )
+        }
+      </Formik>
     </>
   );
 };

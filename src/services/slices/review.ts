@@ -3,6 +3,7 @@ import { RootState, AppDispatch } from '../store';
 import {
   review,
   TLikeAddResponse,
+  TReview,
   TCreateReviewAttrs,
   TCreateReviewResponse
 } from '../api';
@@ -30,40 +31,47 @@ export const create = createAsyncThunk<TCreateReviewResponse, TCreateReviewArgs,
   }
 );
 
-type TReviewState = {
-  create: {
-    isLoading: boolean;
-  },
-  update: {
-    isLoading: boolean;
-  }
+export enum TReviewMode {
+  CREATING,
+  EDITING
+};
+
+export type TReviewState = {
+  mode: TReviewMode,
+  review: TReview | undefined,
+  isLoading: boolean
 };
 
 const initialState: TReviewState = {
-  create: {
-    isLoading: false
-  },
-  update: {
-    isLoading: false
-  },
+  isLoading: false,
+  review: undefined,
+  mode: TReviewMode.CREATING
 };
 
 export const reviewSlice = createSlice({
   name: 'review',
   initialState,
-  reducers: {},
+  reducers: {
+    setMode: (state, action) => {
+      const mode = action.payload;
+      state.mode = mode;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(create.fulfilled, (state, action) => {
-      state.create.isLoading = false;
+      state.isLoading = false;
     });
     builder.addCase(create.rejected, (state, action) => {
-      state.create.isLoading = false;
+      state.isLoading = false;
     });
     builder.addCase(create.pending, (state, action) => {
-      state.create.isLoading = true;
+      state.isLoading = true;
     });
-
   }
 });
+
+const { setMode } = reviewSlice.actions;
+
+export { setMode };
 
 export default reviewSlice.reducer;
