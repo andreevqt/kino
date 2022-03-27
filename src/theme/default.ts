@@ -9,6 +9,7 @@ const defaultColors = {
   gray100: '#191a1d',
   gray200: '#1f2125',
   gray300: '#565c67',
+  gray400: '#f8f8f2',
   blue: '#15171e',
   green: '#3bb33b',
   red: '#ff3347'
@@ -45,7 +46,7 @@ const defaultTheme: TTheme = {
     primary: generatePalletteItem(defaultColors.yellow),
     secondary: generatePalletteItem(defaultColors.gray300),
     success: generatePalletteItem(defaultColors.green),
-    body: generatePalletteItem(defaultColors.white),
+    body: generatePalletteItem(defaultColors.gray400),
     background: generatePalletteItem(defaultColors.gray100),
     border: generatePalletteItem(defaultColors.white),
     white: generatePalletteItem(defaultColors.white),

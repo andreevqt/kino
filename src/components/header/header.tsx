@@ -12,11 +12,6 @@ const Header: React.FC = () => {
   return (
     <Base>
       <Link to="/" className="fontless mr-10"><Logo /></Link>
-      <Nav>
-        <NavLink to="/">Фильмы</NavLink>
-        <NavLink to="/series">Сериалы</NavLink>
-        <NavLink to="/collection">Коллекции</NavLink>
-      </Nav>
       <Nav right>
         {
           user

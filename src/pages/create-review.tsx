@@ -11,5 +11,4 @@ const CreateReview: React.FC = () => {
   );
 };
 
-
 export default CreateReview;

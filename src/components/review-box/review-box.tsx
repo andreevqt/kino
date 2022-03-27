@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import Text from '../text/text';
 import Heart from '../../icons/heart';
 import Star from '../../icons/star';
@@ -7,7 +7,7 @@ import ReadMore from '../read-more/read-more';
 import CommentIcon from '../../icons/comment';
 import UserProfile from '../user-profile/user-profile';
 import Avatar from '../avatar/avatar';
-import { TReview } from '../../services/api';
+import { review, TReview } from '../../services/api';
 import {
   PanelFooter,
   Panel,
@@ -116,6 +116,7 @@ const ReviewBox: React.FC<TReviewBoxProps> = ({
     createdAt,
     title,
     content,
+    movieId,
     liked,
     likesCount
   },
@@ -152,7 +153,7 @@ const ReviewBox: React.FC<TReviewBoxProps> = ({
         </ReviewMeta>
       </PanelHeader>
       <PanelBody>
-        <Text variant="h4">{title}</Text>
+        <Text variant="h4"><Link to={`/movies/${movieId}/reviews/${id}`}>{title}</Link></Text>
         <ReadMore text={content} />
       </PanelBody>
       <PanelFooter>

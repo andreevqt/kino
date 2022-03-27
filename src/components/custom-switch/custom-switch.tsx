@@ -1,7 +1,6 @@
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import { usePageReloaded } from '../../hooks';
-import { Home, Movie, Login, Logout, Register, CreateReview } from '../../pages';
+import { Home, Movie, Login, Logout, Register, CreateReview, SingleReview } from '../../pages';
 import { TLocationState } from '../../types/common';
 import ProtectedRoute from '../protected-route/protected-route';
 import ReviewModal from '../review-modal/review-modal';
@@ -34,7 +33,7 @@ const CustomSwitch: React.FC = () => {
           <CreateReview />
         </ProtectedRoute>
         <Route path="/movies/:movieId/reviews/:reviewId" exact>
-          <CreateReview />
+          <SingleReview />
         </Route>
       </Switch>
       {

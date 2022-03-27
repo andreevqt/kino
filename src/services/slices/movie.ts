@@ -107,7 +107,7 @@ export const movieSlice = createSlice({
   name: 'movie',
   initialState,
   reducers: {
-    onPageUnload: (state) => {
+    reset: (state) => {
       return initialState;
     }
   },
@@ -170,8 +170,8 @@ export const movieSlice = createSlice({
   }
 });
 
-const { onPageUnload } = movieSlice.actions;
+const { reset } = movieSlice.actions;
 
-export { onPageUnload };
+export { reset };
 
 export default movieSlice.reducer;

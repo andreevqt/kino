@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Col, Container, Row } from '../components/grid';
+import LazyImg from '../components/lazy-img/lazy-img';
 import Logo from '../icons/logo';
 
 const FormContainer = styled(Col)`
@@ -13,15 +14,14 @@ const FormContainer = styled(Col)`
   justify-content: center;
 `;
 
-const Background = styled.div<{ background: string }>`
+const Background = styled(LazyImg)`
   position: absolute;
   z-index: -1;
   left: 0;
-  right: 0;
-  bottom: 0;
   top: 0;
-  background-repeat: no-repeat;
-  background-image: ${({ background }) => `url('${background}')`};
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const LogoLink = styled(Link)`
@@ -43,7 +43,7 @@ const Login: React.FC<TLoginProps> = ({ background, children }) => {
       <LogoLink to="/">
         <Logo />
       </LogoLink>
-      <Background background={background} />
+      <Background src={background} alt="background" />
       <Container fullWidth gutter={false}>
         <Row $end $gutter={false}>
           <FormContainer md={6}>

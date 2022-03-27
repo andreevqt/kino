@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import Yup from '../../services/yup';
-import { create } from '../../services/slices/review';
+import { create } from '../../services/slices/edit-review';
 import { useAppDispatch } from '../../services/store';
 import Button from '../button/button';
 import Input from '../form/input';

@@ -4,7 +4,8 @@ import home from './slices/home';
 import movie from './slices/movie';
 import user from './slices/user';
 import common from './slices/common';
-import review from './slices/review';
+import editReview from './slices/edit-review';
+import singleReview from './slices/single-review';
 import { Middleware } from 'redux';
 import error from './middleware/error';
 
@@ -16,7 +17,8 @@ const store = configureStore({
     movie,
     user,
     common,
-    review
+    editReview,
+    singleReview
   }
 });
 

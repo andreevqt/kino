@@ -137,6 +137,7 @@ export type TReview = {
   title: string;
   rating: number;
   movieId: number;
+  movie: TMovieData;
   content: string;
   author: TUser;
   liked: boolean;
@@ -148,6 +149,8 @@ export type TCreateReviewResponse = {
   success: boolean;
   review: TReview;
 };
+
+export type TGetReviewResponse = TCreateReviewResponse;
 
 export type TReviewsListResponse = {
   success: boolean;

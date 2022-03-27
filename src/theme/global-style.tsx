@@ -185,6 +185,14 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
   .pt-10 {
     padding-top: ${({theme}) => `${theme.spaces[10]}px`};
   }
+
+  .lazy {
+    opacity: 0;
+    transition: opacity .4s ease;
+    &.loaded {
+      opacity: 1;
+    }
+  }
 `;
 
 export default GlobalStyle;

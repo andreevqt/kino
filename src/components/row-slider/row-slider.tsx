@@ -6,15 +6,13 @@ import { TMovieData, TMovies } from '../../services/api';
 import Text from '../text/text';
 import { useOnScreen } from '../../hooks';
 import Skeleton from '../skeleton/skeleton';
-import left from '../../images/left.svg';
-import right from '../../images/right.svg';
 import { Navigation } from 'swiper';
 import LazyImg from '../lazy-img/lazy-img';
 
 const renderSkeleton = (count: number) => {
   return [...Array(count)].map((elem, i) => (
     <SwiperSlide key={i}>
-      <Skeleton variant="rectangular" height="275px" margin="0 0 10px 0" />
+      <Skeleton variant="rectangular" height="265px" margin="0 0 10px 0" />
       <Skeleton variant="text" width="60%" height="20px" margin="0 0 5px 0" />
       <Skeleton variant="text" width="40%" height="20px" margin="0 0 5px 0" />
     </SwiperSlide>
@@ -91,13 +89,17 @@ const StyledImageWrapper = styled.div`
   position: relative;
   font-size: 0;
   margin-bottom: ${({ theme }) => `${theme.spaces[3]}px`};
-  min-height: 265px;
+  padding-top: 150%;
   display: flex;
   
   img {
+    position: absolute;
+    top: 0;
+    left: 0;
     border-radius: ${({ theme }) => `${theme.radius.small}`};
     width: 100%;
-    min-height: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   &::after {

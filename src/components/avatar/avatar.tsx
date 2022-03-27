@@ -9,14 +9,17 @@ const StyledAvatar = styled.img`
 `;
 
 type TAvatarProps = {
+  className?: string;
   user: TUser;
 };
 
 const Avatar: React.FC<TAvatarProps> = ({
+  className,
   user
 }) => {
   return (
     <StyledAvatar
+      className={className}
       src={`https://eu.ui-avatars.com/api/?name=${user.name}&background=random&color=fff` || user.image}
       alt={user.name}
     />

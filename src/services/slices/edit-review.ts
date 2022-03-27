@@ -31,47 +31,18 @@ export const create = createAsyncThunk<TCreateReviewResponse, TCreateReviewArgs,
   }
 );
 
-export enum TReviewMode {
-  CREATING,
-  EDITING
-};
-
 export type TReviewState = {
-  mode: TReviewMode,
-  review: TReview | undefined,
-  isLoading: boolean
+  review: TReview | undefined
 };
 
 const initialState: TReviewState = {
-  isLoading: false,
   review: undefined,
-  mode: TReviewMode.CREATING
 };
 
 export const reviewSlice = createSlice({
-  name: 'review',
+  name: 'edit-review',
   initialState,
-  reducers: {
-    setMode: (state, action) => {
-      const mode = action.payload;
-      state.mode = mode;
-    }
-  },
-  extraReducers: (builder) => {
-    builder.addCase(create.fulfilled, (state, action) => {
-      state.isLoading = false;
-    });
-    builder.addCase(create.rejected, (state, action) => {
-      state.isLoading = false;
-    });
-    builder.addCase(create.pending, (state, action) => {
-      state.isLoading = true;
-    });
-  }
+  reducers: {}
 });
-
-const { setMode } = reviewSlice.actions;
-
-export { setMode };
 
 export default reviewSlice.reducer;

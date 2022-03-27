@@ -14,6 +14,7 @@ import {
   TCreateUserReponse,
   TReview,
   TCreateReviewResponse,
+  TGetReviewResponse,
   TReviewsListResponse,
   TLikeAddResponse
 } from './response-types';
@@ -109,6 +110,9 @@ export type TCreateReviewAttrs = {
 };
 
 export const review = {
+  get: (reviewId: number) => axios.private
+    .get<TGetReviewResponse>(`/reviews/${reviewId}`).then((response) => response.data),
+
   create: (movieId: number, data: TCreateReviewAttrs) => axios.private
     .post<TCreateReviewResponse>(`/movies/${movieId}/reviews`, data)
     .then((response) => response.data),
@@ -128,6 +132,7 @@ export {
   type TLoginResponse,
   type TRefreshResponse,
   type TCreateReviewResponse,
+  type TGetReviewResponse,
   type TReviewsListResponse,
   type TUser,
   type TReview,
