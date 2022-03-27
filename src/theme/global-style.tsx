@@ -4,6 +4,7 @@ import { TTheme } from './theme';
 
 const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
   body {
+    overflow-x: hidden;
     margin: 0;
     font-family: ${({ theme }) => `${theme.font.family}`};
     font-size: ${({ theme }) => `${theme.font.sizes[1]}px`};
@@ -184,6 +185,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
 
   .pt-10 {
     padding-top: ${({theme}) => `${theme.spaces[10]}px`};
+  }
+
+  .relative {
+    position: relative;
   }
 
   .lazy {

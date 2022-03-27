@@ -87,16 +87,21 @@ const StyledTag = styled.div`
 
 const StyledImageWrapper = styled.div`
   position: relative;
+  display: flex;
   font-size: 0;
   margin-bottom: ${({ theme }) => `${theme.spaces[3]}px`};
+  background-color: ${({ theme }) => theme.skeleton.base};
   padding-top: 150%;
-  display: flex;
+
+  &,
+  img {
+    border-radius: ${({ theme }) => `${theme.radius.small}`};
+  }
   
   img {
     position: absolute;
     top: 0;
     left: 0;
-    border-radius: ${({ theme }) => `${theme.radius.small}`};
     width: 100%;
     height: 100%;
     object-fit: cover;
