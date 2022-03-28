@@ -1,3 +1,10 @@
+export type TListResponse<T> = {
+  page: number;
+  total: number;
+  totalPages: number;
+  results: T[];
+};
+
 export type TGenre = {
   id: number;
   name: string;
@@ -142,8 +149,17 @@ export type TReview = {
   author: TUser;
   liked: boolean;
   likesCount: number;
+  commentsCount: number;
   createdAt: string;
 };
+
+export type TComment = {
+  id: number;
+  author: TUser;
+  content: string;
+};
+
+export type TCommentsListResponse = TListResponse<TComment>;
 
 export type TCreateReviewResponse = {
   success: boolean;
@@ -152,13 +168,7 @@ export type TCreateReviewResponse = {
 
 export type TGetReviewResponse = TCreateReviewResponse;
 
-export type TReviewsListResponse = {
-  success: boolean;
-  page: number;
-  total: number;
-  totalPages: number;
-  results: TReview[];
-};
+export type TReviewsListResponse = TListResponse<TReview>;
 
 export type TLikeAddResponse = {
   success: boolean;

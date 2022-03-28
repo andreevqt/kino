@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { review, TReview } from '../api';
+import { review, TReview, TComment } from '../api';
 import { TConfig } from '../store';
 import { setError } from './common';
 
@@ -19,11 +19,19 @@ export const get = createAsyncThunk<TReview, number, TConfig>(
 export type TSingleReviewState = {
   review: TReview | undefined;
   isLoading: boolean;
+  comments: {
+    isLoading: boolean;
+    items: TComment[];
+  };
 };
 
 const initialState: TSingleReviewState = {
   review: undefined,
-  isLoading: false
+  isLoading: false,
+  comments: {
+    isLoading: false,
+    items: []
+  }
 };
 
 export const reviewSlice = createSlice({

@@ -13,10 +13,12 @@ import {
   TTokens,
   TCreateUserReponse,
   TReview,
+  TComment,
   TCreateReviewResponse,
   TGetReviewResponse,
   TReviewsListResponse,
-  TLikeAddResponse
+  TLikeAddResponse,
+  TCommentsListResponse
 } from './response-types';
 import { transformMovie, transformMovies } from '../transforms';
 
@@ -111,7 +113,12 @@ export type TCreateReviewAttrs = {
 
 export const review = {
   get: (reviewId: number) => axios.private
-    .get<TGetReviewResponse>(`/reviews/${reviewId}`).then((response) => response.data),
+    .get<TGetReviewResponse>(`/reviews/${reviewId}`)
+    .then((response) => response.data),
+
+  comments: (reviewId: number) => axios.private
+    .get<TCommentsListResponse>(`/reviews/${reviewId}/comments`)
+    .then((response) => response.data),
 
   create: (movieId: number, data: TCreateReviewAttrs) => axios.private
     .post<TCreateReviewResponse>(`/movies/${movieId}/reviews`, data)
@@ -136,6 +143,7 @@ export {
   type TReviewsListResponse,
   type TUser,
   type TReview,
+  type TComment,
   type TLikeAddResponse,
   type TTokens
 };
