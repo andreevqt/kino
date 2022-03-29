@@ -11,12 +11,14 @@ type TextVariants =
   | 'display1'
   | 'display2'
   | 'display3'
+  | 'display4'
   | 'paragraph';
 
 const elements: Record<TextVariants, React.ElementType> = {
   display1: 'div',
   display2: 'div',
   display3: 'div',
+  display4: 'div',
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',
@@ -80,6 +82,14 @@ const getVariant = (variant: TextVariants) => {
       `;
     }
     case 'display3': {
+      return css`
+        display: inline-block;
+        font-weight: 500;
+        font-size: ${({ theme }) => `${theme.font.sizes[1]}px`};
+        margin-bottom: ${({ theme }) => `${theme.font.sizes[3]}px`};
+      `;
+    }
+    case 'display4': {
       return css`
         display: inline-block;
         font-weight: 500;

@@ -1,14 +1,26 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { review, TReview, TComment } from '../api';
+import { review, TReview, TComment, TCommentsListResponse } from '../api';
 import { TConfig } from '../store';
 import { setError } from './common';
 
-export const get = createAsyncThunk<TReview, number, TConfig>(
+export const getReviewById = createAsyncThunk<TReview, number, TConfig>(
   'single-review/get',
   async (id, thunkAPI) => {
     try {
       const response = await review.get(id);
       return response.review;
+    } catch (err) {
+      thunkAPI.dispatch(setError(err));
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+export const getCommentsByReview = createAsyncThunk<TCommentsListResponse, number, TConfig>(
+  'single-review/comments',
+  async (reviewId, thunkAPI) => {
+    try {
+      return review.comments(reviewId);
     } catch (err) {
       thunkAPI.dispatch(setError(err));
       return thunkAPI.rejectWithValue(err);
@@ -39,16 +51,29 @@ export const reviewSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(get.pending, (state, action) => {
+    builder.addCase(getReviewById.pending, (state, action) => {
       state.isLoading = true;
     });
-    builder.addCase(get.fulfilled, (state, action) => {
+    builder.addCase(getReviewById.fulfilled, (state, action) => {
       state.review = action.payload;
       state.isLoading = false;
     });
-    builder.addCase(get.rejected, (state, action) => {
+    builder.addCase(getReviewById.rejected, (state, action) => {
       state.review = undefined;
       state.isLoading = false;
+    });
+
+    builder.addCase(getCommentsByReview.pending, (state, action) => {
+      state.comments.isLoading = false;
+    });
+    builder.addCase(getCommentsByReview.fulfilled, (state, action) => {
+      const { results } = action.payload;
+      state.comments.items = results;
+      state.comments.isLoading = false;
+    });
+    builder.addCase(getCommentsByReview.rejected, (state, action) => {
+      state.comments.items = [];
+      state.comments.isLoading = false;
     });
   }
 });

@@ -122,6 +122,10 @@ const GlobalStyle = createGlobalStyle<{ theme: TTheme }>`
   .mb-2 {
     margin-bottom: ${({theme}) => `${theme.spaces[2]}px`} !important;
   }
+  
+  .mb-3 {
+    margin-bottom: ${({theme}) => `${theme.spaces[3]}px`} !important;
+  }
 
   .mb-4 {
     margin-bottom: ${({theme}) => `${theme.spaces[4]}px`} !important;

@@ -175,7 +175,7 @@ const MovieCard: React.FC<TMovieCardProps> = ({ onClick, movie }) => (
     <StyledTitle variant="display2">
       {movie.title}
     </StyledTitle>
-    <StyledDescription variant="display3" className="mb-0" muted>
+    <StyledDescription variant="display4" className="mb-0" muted>
       {movie.genres.map((genre) => genre.name).join(', ')}
     </StyledDescription>
   </StyledCard>

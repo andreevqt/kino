@@ -141,6 +141,7 @@ export {
   type TCreateReviewResponse,
   type TGetReviewResponse,
   type TReviewsListResponse,
+  type TCommentsListResponse,
   type TUser,
   type TReview,
   type TComment,
