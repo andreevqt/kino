@@ -18,12 +18,13 @@ export const getReviewById = createAsyncThunk<TReview, number, TConfig>(
 
 export const getCommentsByReview = createAsyncThunk<TCommentsListResponse, number, TConfig>(
   'single-review/comments',
-  async (reviewId, thunkAPI) => {
+  async (reviewId, { dispatch, rejectWithValue, getState }) => {
+    const { page } = getState().singleReview.comments;
     try {
-      return review.comments(reviewId);
+      return review.comments(reviewId, page);
     } catch (err) {
-      thunkAPI.dispatch(setError(err));
-      return thunkAPI.rejectWithValue(err);
+      dispatch(setError(err));
+      return rejectWithValue(err);
     }
   }
 );
@@ -32,6 +33,8 @@ export type TSingleReviewState = {
   review: TReview | undefined;
   isLoading: boolean;
   comments: {
+    page: number;
+    hasMore: boolean;
     isLoading: boolean;
     items: TComment[];
   };
@@ -41,6 +44,8 @@ const initialState: TSingleReviewState = {
   review: undefined,
   isLoading: false,
   comments: {
+    page: 1,
+    hasMore: true,
     isLoading: false,
     items: []
   }
@@ -64,12 +69,19 @@ export const reviewSlice = createSlice({
     });
 
     builder.addCase(getCommentsByReview.pending, (state, action) => {
-      state.comments.isLoading = false;
+      state.comments.isLoading = true;
     });
-    builder.addCase(getCommentsByReview.fulfilled, (state, action) => {
-      const { results } = action.payload;
-      state.comments.items = results;
-      state.comments.isLoading = false;
+    builder.addCase(getCommentsByReview.fulfilled, ({ comments }, action) => {
+      const { results, page, totalPages } = action.payload;
+
+      comments.isLoading = false;
+      comments.items = [...comments.items, ...results];
+
+      if (comments.page < totalPages) {
+        comments.page++;
+      }
+
+      comments.hasMore = totalPages !== page;
     });
     builder.addCase(getCommentsByReview.rejected, (state, action) => {
       state.comments.items = [];

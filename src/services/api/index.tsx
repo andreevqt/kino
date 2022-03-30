@@ -116,8 +116,8 @@ export const review = {
     .get<TGetReviewResponse>(`/reviews/${reviewId}`)
     .then((response) => response.data),
 
-  comments: (reviewId: number) => axios.private
-    .get<TCommentsListResponse>(`/reviews/${reviewId}/comments`)
+  comments: (reviewId: number, page: number) => axios.private
+    .get<TCommentsListResponse>(`/reviews/${reviewId}/comments`, { params: { page } })
     .then((response) => response.data),
 
   create: (movieId: number, data: TCreateReviewAttrs) => axios.private

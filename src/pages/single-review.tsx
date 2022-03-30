@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Base from '../layouts/base';
 import Text from '../components/text/text';
 import Input from '../components/form/input';
@@ -207,6 +208,7 @@ const Placeholder: React.FC = () => (
 );
 
 
+
 type TCommentRowProps = {
   comment: TComment;
 };
@@ -216,14 +218,17 @@ const StyledCommentRow = styled.div`
     display: flex;
     margin-bottom: ${theme.spaces[3]}px;
     ${Avatar} img {
-      margin-right: 10px;
+      margin-right: ${theme.spaces[3]}px;
     }
   `}
 `;
 
 const CommentMeta = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 calc(100% - ${32 + theme.spaces[3]}px);
+  `}
 `;
 
 const CommentRow: React.FC<TCommentRowProps> = ({
@@ -240,9 +245,34 @@ const CommentRow: React.FC<TCommentRowProps> = ({
   );
 };
 
+const CommentSkeleton: React.FC = () => (
+  <StyledCommentRow>
+    <Skeleton
+      width="32px"
+      height="32px"
+      className="mr-3"
+      variant="rounded"
+    />
+    <CommentMeta>
+      <Skeleton
+        height="18px"
+        width="40%"
+      />
+      <Skeleton
+        height="12px"
+        width="100%"
+      />
+      <Skeleton
+        height="12px"
+        width="100%"
+      />
+    </CommentMeta>
+  </StyledCommentRow>
+);
+
 const SidebarInner = styled.div`
   ${({ theme }) => `
-    margin-top: ${theme.spaces[5]}px;
+    margin-top: ${theme.spaces[6]}px;
     overflow-y: auto;
     &::-webkit-scrollbar {
       display: none;
@@ -257,12 +287,14 @@ const Sidebar: React.FC<TSidebarProps> = ({
   const dispatch = useAppDispatch();
   const { reviewId } = useParams<{ reviewId: string }>();
   const { user, comments } = useAppSelector((store) => ({
-    user: store.user,
+    user: store.user.user,
     comments: store.singleReview.comments
   }));
 
+  const fetchMore = () => dispatch(getCommentsByReview(+reviewId));
+
   useEffect(() => {
-    dispatch(getCommentsByReview(+reviewId));
+    fetchMore();
   }, [])
 
   return (
@@ -289,15 +321,26 @@ const Sidebar: React.FC<TSidebarProps> = ({
             )
             : <Placeholder />
         }
-        <SidebarInner>
-          {
-            comments.items.map((comment) => (
-              <CommentRow comment={comment} />
-            ))
-          }
+        <SidebarInner id="sidebarInner">
+          <InfiniteScroll
+            dataLength={comments.items.length}
+            loader={<CommentSkeleton />}
+            next={fetchMore}
+            hasMore={comments.hasMore}
+            scrollableTarget="sidebarInner"
+          >
+            {
+              comments.items.map((comment) => (
+                <CommentRow
+                  key={comment.id}
+                  comment={comment}
+                />
+              ))
+            }
+          </InfiniteScroll>
         </SidebarInner>
       </StyledSidebar>
-    </CSSTransition>
+    </CSSTransition >
   );
 };
 
