@@ -1,5 +1,6 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import throttle from 'lodash.throttle'
 import home from './slices/home';
 import movie from './slices/movie';
 import user from './slices/user';
@@ -8,7 +9,9 @@ import editReview from './slices/edit-review';
 import singleReview from './slices/single-review';
 import { Middleware } from 'redux';
 import error from './middleware/error';
+import { loadState, saveState } from './local-storage';
 
+const preloadedState = loadState();
 const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(error),
@@ -19,7 +22,8 @@ const store = configureStore({
     common,
     editReview,
     singleReview
-  }
+  },
+  preloadedState
 });
 
 type RootState = ReturnType<typeof store.getState>;
@@ -29,6 +33,11 @@ type TConfig = {
   state: RootState;
   dispatch: AppDispatch;
 };
+
+store.subscribe(throttle(() => {
+  const { user } = store.getState()
+  saveState({ user });
+}, 1000));
 
 const useAppDispatch = () => useDispatch<AppDispatch>();
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

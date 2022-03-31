@@ -38,17 +38,6 @@ const Login: React.FC = () => {
   const location = useLocation<TLocationState>();
   const { user } = useAppSelector((store) => store.user);
 
-  if (user) {
-    return (
-      <Redirect
-        to={{
-          pathname: location.state?.from?.pathname || '/',
-          ...(location.state && { state: location.state.from?.state })
-        }}
-      />
-    );
-  }
-
   return (
     <LoginLayout background={bg}>
       <Formik
@@ -67,36 +56,48 @@ const Login: React.FC = () => {
             values,
             isSubmitting
           }) => (
-            <StyledForm>
-              <Text variant="h3" className="mb-10">Добро пожаловать!</Text>
-              <Input
-                name="email"
-                placeholder="E-mail"
-                className="mb-5"
-                type="email"
-                icon={<Mail width="16" height="16" />}
-                error={!!(touched.email && errors.email)}
-                errorText={errors?.email}
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <PasswordInput
-                name="password"
-                placeholder="Пароль"
-                className="mb-5"
-                error={!!(touched.password && errors.password)}
-                errorText={errors?.password}
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <Text variant="paragraph" className="mb-10 d-flex">Нет аккаунта?&nbsp;
-                <Link to="/register" className="link">Регистрация</Link>
-                <Link to="/forgot-password" className="link ml-auto">Забыли пароль?</Link>
-              </Text>
-              <Button type="submit" size="big" fullWidth loading={isSubmitting}>Войти</Button>
-            </StyledForm>
+            <>
+              {
+                user && !isSubmitting && (
+                  <Redirect
+                    to={{
+                      pathname: location.state?.from?.pathname || '/',
+                      ...(location.state && { state: location.state.from?.state })
+                    }}
+                  />
+                )
+              }
+              <StyledForm>
+                <Text variant="h3" className="mb-10">Добро пожаловать!</Text>
+                <Input
+                  name="email"
+                  placeholder="E-mail"
+                  className="mb-5"
+                  type="email"
+                  icon={<Mail width="16" height="16" />}
+                  error={!!(touched.email && errors.email)}
+                  errorText={errors?.email}
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <PasswordInput
+                  name="password"
+                  placeholder="Пароль"
+                  className="mb-5"
+                  error={!!(touched.password && errors.password)}
+                  errorText={errors?.password}
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <Text variant="paragraph" className="mb-10 d-flex">Нет аккаунта?&nbsp;
+                  <Link to="/register" className="link">Регистрация</Link>
+                  <Link to="/forgot-password" className="link ml-auto">Забыли пароль?</Link>
+                </Text>
+                <Button type="submit" size="big" fullWidth loading={isSubmitting}>Войти</Button>
+              </StyledForm>
+            </>
           )
         }
       </Formik>
