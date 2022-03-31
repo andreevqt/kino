@@ -45,7 +45,7 @@ const Skeleton: React.FC<TSkeletonProps> = ({
   height,
   margin,
   variant = 'text',
-  borderRadius = '8px',
+  borderRadius = '3px',
   className
 }) => {
 

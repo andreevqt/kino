@@ -54,7 +54,11 @@ const initialState: TSingleReviewState = {
 export const reviewSlice = createSlice({
   name: 'single-review',
   initialState,
-  reducers: {},
+  reducers: {
+    resetReview: (state) => {
+      return initialState;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getReviewById.pending, (state, action) => {
       state.isLoading = true;
@@ -81,7 +85,7 @@ export const reviewSlice = createSlice({
         comments.page++;
       }
 
-      comments.hasMore = totalPages !== page;
+      comments.hasMore = totalPages > page;
     });
     builder.addCase(getCommentsByReview.rejected, (state, action) => {
       state.comments.items = [];
@@ -89,5 +93,9 @@ export const reviewSlice = createSlice({
     });
   }
 });
+
+const { resetReview } = reviewSlice.actions
+
+export { resetReview };
 
 export default reviewSlice.reducer;

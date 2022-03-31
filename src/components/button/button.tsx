@@ -147,7 +147,7 @@ const Button = styled(ButtonComponent) <TStyledButtonProps>`
   ${({ theme, variant = 'primary', fullWidth = false, size = 'medium', loading = false }) => css`
     padding: ${theme.spaces[3]}px ${theme.spaces[8]}px;
     position: relative;
-    border-radius: 8px;
+    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;

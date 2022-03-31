@@ -64,7 +64,7 @@ const StyledSwiper = styled(Swiper)`
     display: flex;
     position: relative;
     overflow: hidden;
-    border-radius: 20px;
+    border-radius: 3px;
     &::after {
       position: absolute;
       z-index: 2;
@@ -95,7 +95,7 @@ const StyledSwiper = styled(Swiper)`
   }
 
   .swiper-slide__img {
-    border-radius: 20px;
+    border-radius: 3px;
     width: 100%;
     height: auto;
   }

@@ -95,7 +95,7 @@ const StyledImageWrapper = styled.div`
 
   &,
   img {
-    border-radius: ${({ theme }) => `${theme.radius.small}`};
+    border-radius: 3px;
   }
   
   img {
@@ -108,7 +108,7 @@ const StyledImageWrapper = styled.div`
   }
 
   &::after {
-    border-radius: ${({ theme }) => `${theme.radius.small}`};
+    border-radius: 3px;
     opacity: 0;
     visibility: hidden;
     position: absolute;

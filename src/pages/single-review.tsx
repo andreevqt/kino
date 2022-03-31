@@ -7,7 +7,7 @@ import Base from '../layouts/base';
 import Text from '../components/text/text';
 import Input from '../components/form/input';
 import { Container, Row } from '../components/grid';
-import { getReviewById, getCommentsByReview } from '../services/slices/single-review';
+import { getReviewById, getCommentsByReview, resetReview } from '../services/slices/single-review';
 import { useAppSelector, useAppDispatch } from '../services/store';
 import Skeleton from '../components/skeleton/skeleton';
 import Avatar from '../components/avatar/avatar';
@@ -38,7 +38,7 @@ const SingleReviewSkeleton: React.FC = () => (
 const ReviewHeading = styled.div`
   ${({ theme }) => `
     display: flex;
-    margin-bottom: ${theme.spaces[10]}px;
+    margin-bottom: ${theme.spaces[5]}px;
   `}
 `;
 
@@ -111,7 +111,7 @@ const Counter = styled.div`
 `;
 
 const ToolbarBtn = styled.div`
-  ${({ theme, }) => `
+  ${({ theme }) => `
     position: relative;
     cursor: pointer;
     font-size: 0;
@@ -255,7 +255,7 @@ const CommentSkeleton: React.FC = () => (
     />
     <CommentMeta>
       <Skeleton
-        height="18px"
+        height="12px"
         width="40%"
       />
       <Skeleton
@@ -264,7 +264,7 @@ const CommentSkeleton: React.FC = () => (
       />
       <Skeleton
         height="12px"
-        width="100%"
+        width="80%"
       />
     </CommentMeta>
   </StyledCommentRow>
@@ -295,6 +295,9 @@ const Sidebar: React.FC<TSidebarProps> = ({
 
   useEffect(() => {
     fetchMore();
+    return () => {
+      dispatch(resetReview());
+    };
   }, [])
 
   return (
