@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
-import { store } from '../store';
+import Cookie from 'js-cookie';
 import { decode } from '../jwt';
-import { refresh } from '../slices/user';
+import * as api from '.';
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -39,27 +39,35 @@ const errorHandler = (err: AxiosError) => {
 
 requests.private.interceptors.request.use(
   async (config) => {
-    const accessToken = store?.getState()?.user.accessToken;
+    const accessToken = Cookie.get('accessToken');
     if (accessToken && !isExpired(accessToken)) {
-      if (config?.headers) {
+      if (config.headers) {
         config.headers['authorization'] = accessToken;
       }
 
       return config;
     }
 
-    await store.dispatch(refresh());
+    try {
+      const refreshToken = Cookie.get('refreshToken');
+      if (!refreshToken) {
+        throw Error('Wrong or missing token');
+      };
 
-    const newAccessToken = store?.getState()?.user.accessToken;
-    if (!newAccessToken) {
+      const { access, refresh } = await api.user.refresh(refreshToken);
+      Cookie.set('accessToken', access);
+      Cookie.set('refreshToken', refresh);
+
+      if (config.headers) {
+        config.headers['authorization'] = access;
+      }
+
+      return config;
+    } catch (err) {
+      Cookie.remove('accessToken');
+      Cookie.remove('refreshToken');
       return config;
     }
-
-    if (config?.headers) {
-      config.headers['authorization'] = newAccessToken;
-    }
-
-    return config;
   },
   (err) => {
     return Promise.reject(err);

@@ -9,7 +9,6 @@ type TUserState = {
     name: string;
     email: string;
   } | undefined,
-  accessToken: string | undefined;
   isLoading: boolean;
 };
 
@@ -26,7 +25,6 @@ type TRegisterArgs = TLoginArgs & { name: string };
 
 const initialState: TUserState = {
   user: undefined,
-  accessToken: undefined,
   isLoading: false
 };
 
@@ -36,6 +34,7 @@ export const login = createAsyncThunk<TLogin, TLoginArgs, TConfig>(
     try {
       const response = await user.login(email, password);
       Cookie.set('refreshToken', response.tokens.refresh);
+      Cookie.set('acessToken', response.tokens.refresh);
       return response;
     } catch (err: any) {
       dispatch(setError(err));
@@ -50,6 +49,7 @@ export const register = createAsyncThunk<TRegister, TRegisterArgs, TConfig>(
     try {
       const response = await user.create(email, password, name);
       Cookie.set('refreshToken', response.tokens.refresh);
+      Cookie.set('acessToken', response.tokens.refresh);
       return response;
     } catch (err: any) {
       dispatch(setError(err));
@@ -66,11 +66,13 @@ export const logout = createAsyncThunk<void, () => void, TConfig>(
       if (token) {
         await user.logout(token);
       }
-      Cookie.set('refreshToken', '');
       cb();
     } catch (err: any) {
       dispatch(setError(err));
       return rejectWithValue(err);
+    } finally {
+      Cookie.remove('accessToken');
+      Cookie.remove('refreshToken');
     }
   }
 );
@@ -118,7 +120,6 @@ export const userSlice = createSlice({
       const user = action.payload;
       state.isLoading = false;
       state.user = { name: user.name, email: user.email }
-      state.accessToken = user.tokens.access;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.user = undefined;
@@ -133,7 +134,6 @@ export const userSlice = createSlice({
       const user = action.payload;
       state.isLoading = false;
       state.user = { name: user.name, email: user.email }
-      state.accessToken = user.tokens.access;
     });
     builder.addCase(register.rejected, (state, action) => {
       state.user = undefined;
@@ -159,7 +159,6 @@ export const userSlice = createSlice({
     builder.addCase(refresh.fulfilled, (state, action) => {
       const tokens = action.payload;
       state.isLoading = false;
-      state.accessToken = tokens?.access;
     });
     builder.addCase(refresh.rejected, (state, action) => {
       state.isLoading = false;
