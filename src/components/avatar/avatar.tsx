@@ -4,6 +4,7 @@ import { TUser } from '../../services/api';
 
 const StyledAvatar = styled.img<{ size: string }>`
   ${({ size }) => `
+    background-color: transparent;
     border-radius: 50%;
     width: ${size};
     height: ${size};

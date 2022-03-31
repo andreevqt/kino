@@ -5,10 +5,7 @@ import Cookie from 'js-cookie';
 import { setError } from './common';
 
 type TUserState = {
-  user: {
-    name: string;
-    email: string;
-  } | undefined,
+  user: TUser | undefined,
   isLoading: boolean;
 };
 
@@ -117,9 +114,8 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(login.fulfilled, (state, action) => {
-      const user = action.payload;
       state.isLoading = false;
-      state.user = { name: user.name, email: user.email }
+      state.user = action.payload;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.user = undefined;
@@ -131,9 +127,8 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(register.fulfilled, (state, action) => {
-      const user = action.payload;
       state.isLoading = false;
-      state.user = { name: user.name, email: user.email }
+      state.user = action.payload;
     });
     builder.addCase(register.rejected, (state, action) => {
       state.user = undefined;
@@ -157,7 +152,6 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(refresh.fulfilled, (state, action) => {
-      const tokens = action.payload;
       state.isLoading = false;
     });
     builder.addCase(refresh.rejected, (state, action) => {
@@ -169,9 +163,8 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getUser.fulfilled, (state, action) => {
-      const user = action.payload;
       state.isLoading = false;
-      state.user = user;
+      state.user = action.payload;
     });
     builder.addCase(getUser.rejected, (state, action) => {
       state.isLoading = false;
