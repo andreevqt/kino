@@ -41,46 +41,17 @@ const MovieSkeleton: React.FC = () => (
           <Skeleton height="24px" borderRadius="3px" width="30%" className="mb-5" />
           <Row>
             <Col md={3}>
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
+              <Skeleton count={10} height="16px" borderRadius="3px" className="mb-2" />
             </Col>
             <Col md={5}>
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
-              <Skeleton height="16px" borderRadius="3px" className="mb-2" />
+              <Skeleton count={10} height="16px" borderRadius="3px" className="mb-2" />
             </Col>
           </Row>
         </Col>
       </Row>
     </Col>
     <Col md={3}>
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
-      <Skeleton height="16px" borderRadius="3px" width="40%" className="mb-2" />
+      <Skeleton count={12} height="16px" borderRadius="3px" width="40%" className="mb-2" />
     </Col>
   </Row>
 );
@@ -88,7 +59,7 @@ const MovieSkeleton: React.FC = () => (
 const Poster = styled(LazyImg)`
   ${({ theme }) => `
     width: 100%;
-    border-radius: ${theme.radius.small};
+    border-radius: 3px;
     margin-bottom: ${theme.spaces[5]}px;
   `}
 `;
@@ -152,10 +123,14 @@ const Movie: React.FC = () => {
                         <MovieDescription movie={movie} />
                       </Col>
                     </Row>
-                    <div className="mb-10">
-                      <Text variant="h4" className="mb-5">Обзор</Text>
-                      <Text variant="paragraph">{movie.overview}</Text>
-                    </div>
+                    {
+                      movie.overview && (
+                        <div className="mb-10">
+                          <Text variant="h4" className="mb-5">Обзор</Text>
+                          <Text variant="paragraph">{movie.overview}</Text>
+                        </div>
+                      )
+                    }
                     <div className="mb-10">
                       <Text variant="h4">Похожие фильмы</Text>
                       <RowSlider

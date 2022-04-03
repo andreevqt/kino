@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import { Home, Movie, Login, Logout, Register, CreateReview, SingleReview } from '../../pages';
+import { Home, Movie, Login, Logout, Register, CreateReview, SingleReview, Profile } from '../../pages';
 import { TLocationState } from '../../types/common';
 import ProtectedRoute from '../protected-route/protected-route';
 import ReviewModal from '../review-modal/review-modal';
@@ -24,6 +24,9 @@ const CustomSwitch: React.FC = () => {
         </Route>
         <Route path="/register" exact>
           <Register />
+        </Route>
+        <Route path="/profile" exact>
+          <Profile />
         </Route>
         <Route path="/movies/:movieId" exact>
           <ScrollToTop />

@@ -21,7 +21,7 @@ const AvatarBtn = styled.button`
       border: 1px solid ${theme.colors.background.light};
     }
     &:focus {
-      box-shadow: 0 0 0 3.2px ${alpha(theme.colors.primary.base, .5)};
+      box-shadow: 0 0 0 1px ${alpha(theme.colors.primary.base, 1)};
       ${Avatar} {
         border-color: ${theme.colors.primary.base};
       }

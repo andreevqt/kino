@@ -16,7 +16,7 @@ const skeletonAnimation = keyframes`
 ` ;
 
 const StyledSkeleton = styled.div<{ width?: string; height?: string; variant: SkeletonVariant; margin?: string, borderRadius?: string }>`
-    display: ${({ variant }) => `${variant === 'text' ? 'inline-block' : 'block'}`} ;
+    display: block;
     width: ${({ width }) => width ?? `100%`};
     height: ${({ height }) => height ?? 'auto'};
     font-size: 0;
@@ -48,22 +48,22 @@ const Skeleton: React.FC<TSkeletonProps> = ({
   borderRadius = '3px',
   className
 }) => {
-
   return (
-    <div className={className}>
+    <>
       {
         [...Array(count)].map((elem, i) => (
-          <StyledSkeleton
-            key={i}
-            variant={variant}
-            margin={margin}
-            width={width}
-            height={height}
-            borderRadius={borderRadius}
-          />
+          <div key={i} className={className}>
+            <StyledSkeleton
+              variant={variant}
+              margin={margin}
+              width={width}
+              height={height}
+              borderRadius={borderRadius}
+            />
+          </div>
         ))
       }
-    </div>
+    </>
   );
 };
 
