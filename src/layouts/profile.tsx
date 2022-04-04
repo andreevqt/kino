@@ -36,7 +36,7 @@ const Profile: React.FC = ({
     <Section>
       <Container>
         <Row>
-          <Col md={3}>
+          <Col md={3} className="pr-10">
             <Nav>
               <NavLink to="/profile">
                 <Gears width='14' height='14' />

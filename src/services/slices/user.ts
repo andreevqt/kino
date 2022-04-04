@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { user, TUser, TTokens } from '../api';
-import { RootState, AppDispatch } from '../store';
+import { user, TUser, TTokens, TUserUpdateAttrs } from '../api';
+import { RootState, AppDispatch, TConfig } from '../store';
 import Cookie from 'js-cookie';
 import { setError } from './common';
 
@@ -9,21 +9,13 @@ type TUserState = {
   isLoading: boolean;
 };
 
-type TConfig = {
-  state: RootState;
-  dispatch: AppDispatch;
-};
-
-type TLogin = TUser & { tokens: TTokens };
-type TLoginArgs = { email: string, password: string };
-
-type TRegister = TLogin;
-type TRegisterArgs = TLoginArgs & { name: string };
-
 const initialState: TUserState = {
   user: undefined,
   isLoading: false
 };
+
+type TLogin = TUser & { tokens: TTokens };
+type TLoginArgs = { email: string, password: string };
 
 export const login = createAsyncThunk<TLogin, TLoginArgs, TConfig>(
   'user/login',
@@ -40,14 +32,31 @@ export const login = createAsyncThunk<TLogin, TLoginArgs, TConfig>(
   }
 );
 
+type TRegister = TLogin;
+type TRegisterArgs = TLoginArgs & { name: string };
+
 export const register = createAsyncThunk<TRegister, TRegisterArgs, TConfig>(
   'user/register',
-  async ({ email, password, name }, { dispatch, rejectWithValue }) => {
+  async (attrs, { dispatch, rejectWithValue }) => {
     try {
-      const response = await user.create(email, password, name);
+      const response = await user.create(attrs);
       Cookie.set('refreshToken', response.tokens.refresh);
       Cookie.set('acessToken', response.tokens.refresh);
       return response;
+    } catch (err: any) {
+      dispatch(setError(err));
+      return rejectWithValue(err);
+    }
+  }
+);
+
+type TUpdateArgs = TUserUpdateAttrs & { id: number };
+
+export const update = createAsyncThunk<TUser, TUpdateArgs, TConfig>(
+  'user/update',
+  async ({ id, ...rest }, { dispatch, rejectWithValue }) => {
+    try {
+      return user.update(id, rest);
     } catch (err: any) {
       dispatch(setError(err));
       return rejectWithValue(err);
@@ -109,6 +118,19 @@ export const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // update
+    builder.addCase(update.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(update.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+    });
+    builder.addCase(update.rejected, (state, action) => {
+      state.user = undefined;
+      state.isLoading = false;
+    });
+
     // login
     builder.addCase(login.pending, (state, action) => {
       state.isLoading = true;

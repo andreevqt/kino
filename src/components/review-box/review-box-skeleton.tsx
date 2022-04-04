@@ -32,7 +32,7 @@ const ReviewBoxSkeleton: React.FC = () => (
           <Skeleton width="64px" height="64px" variant="rounded" />
         </SkeletonAvatar>
         <SkeletonAuthor>
-          <Skeleton width="200px" height="14px" />
+          <Skeleton width="200px" height="14px" className="mb-2" />
           <Skeleton width="150px" height="14px" />
         </SkeletonAuthor>
       </SkeletonAuthorWrapper>

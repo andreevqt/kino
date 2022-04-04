@@ -127,12 +127,14 @@ export type TLogoutResponse = {
   message: string;
 };
 
-export type TUserReponse = {
+export type TUserResponse = {
   success: boolean;
   user: TUser;
 };
 
 export type TCreateUserReponse = TLoginResponse;
+
+export type TUpdateUserResponse = TUserResponse;
 
 export type TRefreshResponse = {
   success: boolean;

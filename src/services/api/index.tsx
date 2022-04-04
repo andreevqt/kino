@@ -8,7 +8,8 @@ import {
   TLoginResponse,
   TUser,
   TLogoutResponse,
-  TUserReponse,
+  TUserResponse,
+  TUpdateUserResponse,
   TRefreshResponse,
   TTokens,
   TCreateUserReponse,
@@ -85,9 +86,25 @@ export const movies = {
     .then((response) => response.data)
 };
 
+export type TUserCreateAttrs = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export type TUserUpdateAttrs = {
+  name?: string;
+  email?: string;
+  password?: string;
+};
+
 export const user = {
-  create: (email: string, password: string, name: string) => axios.public
-    .post<TCreateUserReponse>('/users', { email, password, name })
+  create: (attrs: TUserCreateAttrs) => axios.public
+    .post<TCreateUserReponse>('/users', attrs)
+    .then((response) => response.data.user),
+
+  update: (id: number, attrs: TUserUpdateAttrs) => axios.private
+    .put<TUpdateUserResponse>(`/users/${id}`, attrs)
     .then((response) => response.data.user),
 
   login: (email: string, password: string) => axios.public
@@ -102,7 +119,7 @@ export const user = {
     .then((response) => response.data.tokens),
 
   get: () => axios.private
-    .get<TUserReponse>(`/users`)
+    .get<TUserResponse>(`/users`)
     .then((response) => response.data.user)
 };
 

@@ -4,12 +4,14 @@ import styled from 'styled-components';
 import Button from '../button/button';
 import Logo from '../../icons/logo';
 import Avatar from '../avatar/avatar';
-import { Nav, NavLink } from '../nav/nav';
+import { Nav } from '../nav/nav';
 import { useAppSelector } from '../../services/store';
 import { alpha } from '../../theme/utils';
 import { Dropdown, DropdownItem } from '../dropdown/dropdown';
 import Base from './base';
 import { useOnClickOutside } from '../../hooks';
+import User from '../../icons/user';
+import Logout from '../../icons/logout';
 
 const AvatarBtn = styled.button`
   ${({ theme }) => `
@@ -53,9 +55,11 @@ const Header: React.FC = () => {
                   isDropdownShown && (
                     <Dropdown ref={dropdownRef}>
                       <DropdownItem to="/profile">
+                        <User width="12" height="12" />
                         Профиль
                       </DropdownItem>
                       <DropdownItem to="/logout">
+                        <Logout width="12" height="12" />
                         Выйти
                       </DropdownItem>
                     </Dropdown>
