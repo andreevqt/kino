@@ -95,7 +95,9 @@ export type TUserCreateAttrs = {
 export type TUserUpdateAttrs = {
   name?: string;
   email?: string;
-  password?: string;
+  vk?: string;
+  facebook?: string;
+  telegram?: string;
 };
 
 export const user = {

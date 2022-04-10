@@ -31,12 +31,9 @@ const Settings: React.FC = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={
-          ({ name, email }, { setSubmitting }) =>
-            user && dispatch(update({
-              id: user.id,
-              name,
-              email
-            })).then(() => setSubmitting(false))
+          (attrs, { setSubmitting }) =>
+            user && dispatch(update({ id: user.id, ...attrs }))
+              .then(() => setSubmitting(false))
         }
       >
         {
@@ -49,7 +46,7 @@ const Settings: React.FC = () => {
             isSubmitting
           }) => (
             <Form>
-              
+
               <Row>
                 <Col md={8}>
                   <Text variant="h5">Личные данные</Text>
@@ -110,7 +107,7 @@ const Settings: React.FC = () => {
                     errorText={errors?.telegram}
                   />
                 </Col>
-                <Col md={4}>
+                <Col md={4} className="pl-10">
                   <FileUpload label="Изображение профиля" />
                 </Col>
               </Row>
