@@ -115,6 +115,9 @@ export type TUser = {
   email: string;
   image: any;
   reviewsCount: number;
+  vk: string;
+  telegram: string;
+  facebook: string;
 };
 
 export type TLoginResponse = {

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import Profile from '../../layouts/profile';
 import Text from '../../components/text/text';
 import Input from '../../components/form/input'
+import FileUpload from '../../components/form/file-upload';
 import { Row, Col } from '../../components/grid';
 import Button from '../../components/button/button';
 import { update } from '../../services/slices/user';
@@ -23,7 +24,10 @@ const Settings: React.FC = () => {
       <Formik
         initialValues={{
           name: user?.name,
-          email: user?.email
+          email: user?.email,
+          vk: user?.vk,
+          facebook: user?.facebook,
+          telegram: user?.telegram
         }}
         validationSchema={validationSchema}
         onSubmit={
@@ -45,9 +49,10 @@ const Settings: React.FC = () => {
             isSubmitting
           }) => (
             <Form>
-              <Text variant="h3">Личные данные</Text>
+              
               <Row>
-                <Col md={6}>
+                <Col md={8}>
+                  <Text variant="h5">Личные данные</Text>
                   <Input
                     className="mb-5"
                     name="name"
@@ -59,8 +64,6 @@ const Settings: React.FC = () => {
                     error={!!(touched.name && errors.name)}
                     errorText={errors?.name}
                   />
-                </Col>
-                <Col md={6}>
                   <Input
                     className="mb-5"
                     name="email"
@@ -72,6 +75,43 @@ const Settings: React.FC = () => {
                     error={!!(touched.email && errors.email)}
                     errorText={errors?.email}
                   />
+                  <Text variant="h5">Соц. сети</Text>
+                  <Input
+                    className="mb-5"
+                    name="vk"
+                    placeholder="VK"
+                    type="text"
+                    value={values.vk}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!(touched.vk && errors.vk)}
+                    errorText={errors?.vk}
+                  />
+                  <Input
+                    className="mb-5"
+                    name="facebook"
+                    placeholder="Facebook"
+                    type="text"
+                    value={values.facebook}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!(touched.facebook && errors.facebook)}
+                    errorText={errors?.facebook}
+                  />
+                  <Input
+                    className="mb-5"
+                    name="telegram"
+                    placeholder="Telegram"
+                    type="text"
+                    value={values.telegram}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!(touched.telegram && errors.telegram)}
+                    errorText={errors?.telegram}
+                  />
+                </Col>
+                <Col md={4}>
+                  <FileUpload label="Изображение профиля" />
                 </Col>
               </Row>
               <Button type="submit" loading={isSubmitting}>Сохранить</Button>
