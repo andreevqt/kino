@@ -7,6 +7,9 @@ import DropZone from './drop-zone';
 
 type TFileProps = {
   label: string;
+  value?: File;
+  src?: string;
+  onChange: (file?: File) => void;
 };
 
 const FileWrapper = styled.div`
@@ -19,7 +22,7 @@ const FileWrapper = styled.div`
   padding-top: 100%;
 `;
 
-const Img = styled.img`
+const Preview = styled.img`
   position: absolute;
   top: 0;
   bottom: 0;
@@ -31,14 +34,18 @@ const Img = styled.img`
 `;
 
 const FileUpload: React.FC<TFileProps> = ({
-  label
+  label,
+  src,
+  value,
+  onChange
 }) => {
-  const [file, setFile] = useState<any>("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onDrop = (file: any) => {
-    setFile(file);
+  const onDrop = (file: File) => {
+    onChange(file);
   };
+
+  const hasImage = !!(value || src);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -47,7 +54,7 @@ const FileUpload: React.FC<TFileProps> = ({
         type="file"
         hidden
         accept="image/jpeg,image/png"
-        onChange={(e) => setFile(e.target.files?.[0])}
+        onChange={(e) => onChange(e.target.files?.[0])}
         ref={inputRef}
       />
       <FileWrapper onClick={() => {
@@ -55,12 +62,11 @@ const FileUpload: React.FC<TFileProps> = ({
           inputRef.current.click();
         }
       }}>
-        {file && <Img src={URL.createObjectURL(file)} />}
-        <DropZone isEmpty={!file} onDrop={onDrop} />
+        {hasImage && <Preview src={value ? URL.createObjectURL(value) : src} />}
+        <DropZone isEmpty={!hasImage} onDrop={onDrop} />
       </FileWrapper>
     </DndProvider>
   );
 };
-
 
 export default FileUpload;

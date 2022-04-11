@@ -22,6 +22,7 @@ import {
   TCommentsListResponse
 } from './response-types';
 import { transformMovie, transformMovies } from '../transforms';
+import appendToFormData from '../../utils/form-data';
 
 type TBackdropSizes = 300 | 780 | 1280 | 'original';
 type TPosterSizes = 92 | 154 | 185 | 342 | 500 | 780 | 'original';
@@ -87,12 +88,14 @@ export const movies = {
 };
 
 export type TUserCreateAttrs = {
+  image?: File;
   name: string;
   email: string;
   password: string;
 };
 
 export type TUserUpdateAttrs = {
+  image?: File;
   name?: string;
   email?: string;
   vk?: string;
@@ -101,13 +104,31 @@ export type TUserUpdateAttrs = {
 };
 
 export const user = {
-  create: (attrs: TUserCreateAttrs) => axios.public
-    .post<TCreateUserReponse>('/users', attrs)
-    .then((response) => response.data.user),
+  create: ({ image, ...rest }: TUserCreateAttrs) => {
+    const formData = new FormData();
+    if (image) {
+      formData.append('image', image);
+    };
 
-  update: (id: number, attrs: TUserUpdateAttrs) => axios.private
-    .put<TUpdateUserResponse>(`/users/${id}`, attrs)
-    .then((response) => response.data.user),
+    formData.append('attrs', JSON.stringify(rest));
+
+    return axios.public
+      .post<TCreateUserReponse>('/users', formData)
+      .then((response) => response.data.user);
+  },
+
+  update: (id: number, { image, ...rest }: TUserUpdateAttrs) => {
+    const formData = new FormData();
+    if (image) {
+      formData.append('avatar', image);
+    };
+
+    formData.append('attrs', JSON.stringify(rest));
+
+    return axios.private
+      .post<TUpdateUserResponse>(`/users/${id}`, formData)
+      .then((response) => response.data.user);
+  },
 
   login: (email: string, password: string) => axios.public
     .post<TLoginResponse>('/users/login', { email, password })

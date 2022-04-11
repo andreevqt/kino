@@ -127,7 +127,6 @@ export const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(update.rejected, (state, action) => {
-      state.user = undefined;
       state.isLoading = false;
     });
 
